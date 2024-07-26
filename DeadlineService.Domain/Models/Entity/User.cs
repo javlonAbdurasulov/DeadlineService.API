@@ -8,9 +8,8 @@ namespace DeadlineService.Domain.Models.Entity
 {
     public class User
     {
-        public User(int id, string username, string passwordHash)
+        public User( string username, string passwordHash)
         {
-            Id = id;
             Username = username;
             PasswordHash = passwordHash;
 
@@ -21,7 +20,9 @@ namespace DeadlineService.Domain.Models.Entity
 
         public int? PersonalInfoId{ get; set; }
         public PersonalInfo? PersonalInfo{ get; set; }
-        public List<Order>? Orders{ get; set; }
+
+        public ICollection<Order> CreatedOrders { get; set; }
+        public ICollection<Order> AssignedOrders { get; set; }
 
 
     }
