@@ -17,6 +17,8 @@ namespace DeadlineService.Domain.Models.Entity
         public decimal Price { get; set; }
         public DateTime CreatedDate { get; set; }
         public DateTime Deadline { get; set; }
+        public OrderStatus OrderStatus{ get; set; }
+
 
         public int CommentId { get; set; }
         public Comment Comment{ get; set; }
