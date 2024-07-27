@@ -1,5 +1,4 @@
 ﻿using DeadlineService.Application.Interfaces.Repostitories;
-using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Domain.Models.Entity;
 using DeadlineService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -11,11 +10,11 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Infrastructure.Services
 {
-    public class PersonalInfoService : IPersonalInfoRepository
+    public class PersonalInfoRepository : IPersonalInfoRepository
     {
         public readonly DSDbContext _db;
 
-        public PersonalInfoService(DSDbContext dbContext)
+        public PersonalInfoRepository(DSDbContext dbContext)
         {
             _db = dbContext;
         }
