@@ -8,6 +8,6 @@ namespace DeadlineService.Application.Interfaces.Base
 {
     public interface IDeleteService
     {
-        public abstract Task<bool> DeleteAsync(int id);
+        public Task<bool> DeleteAsync(int id);
     }
 }

@@ -8,6 +8,6 @@ namespace DeadlineService.Application.Interfaces.Base
 {
     public interface IUpdateService<T> where T : class
     {
-        public Task<bool> UpdateAsync(T obj);
+        public Task<T> UpdateAsync(T obj);
     }
 }

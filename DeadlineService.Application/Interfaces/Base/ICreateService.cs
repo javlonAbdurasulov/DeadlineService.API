@@ -2,6 +2,6 @@
 {
     public interface ICreateService<T> where T : class
     {
-        public abstract Task<bool> CreateAsync(T obj);
+    public Task<T> CreateAsync(T obj);
     }
 }

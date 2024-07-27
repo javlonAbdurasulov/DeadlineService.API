@@ -1,11 +1,6 @@
 ﻿using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Domain.Models.Entity;
 using DeadlineService.Infrastructure.Data;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeadlineService.Infrastructure.Services
 {
@@ -16,11 +11,11 @@ namespace DeadlineService.Infrastructure.Services
         {
             _db=db;
         }
-        public async Task<bool> CreateAsync(User obj)
+        public async Task<User> CreateAsync(User obj)
         {
             await _db.Users.AddAsync(obj);
-            int result=  await _db.SaveChangesAsync();
-            return result > 0;
+            await _db.SaveChangesAsync();
+            return obj;
         }
 
         public Task<bool> DeleteAsync(int id)
@@ -33,7 +28,7 @@ namespace DeadlineService.Infrastructure.Services
             throw new NotImplementedException();
         }
 
-        public Task<bool> UpdateAsync(User obj)
+        public Task<User> UpdateAsync(User obj)
         {
             throw new NotImplementedException();
         }
