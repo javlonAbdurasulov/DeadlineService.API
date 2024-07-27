@@ -20,8 +20,8 @@ namespace DeadlineService.Domain.Models.Entity
         public OrderStatus OrderStatus{ get; set; }
 
 
-        public int CommentId { get; set; }
-        public Comment Comment{ get; set; }
+        public int? CommentId { get; set; }
+        public Comment? Comment{ get; set; }
 
         [ForeignKey("CreatedByUser")]
         public int CreatedByUserId { get; set; }
