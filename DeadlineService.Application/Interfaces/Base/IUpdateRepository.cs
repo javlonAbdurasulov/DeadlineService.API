@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Interfaces.Base
 {
-    public interface IUpdateService<T> where T : class
+    public interface IUpdateRepository<T> where T : class
     {
         public Task<T> UpdateAsync(T obj);
     }
