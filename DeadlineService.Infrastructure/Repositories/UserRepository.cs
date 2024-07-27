@@ -21,7 +21,10 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            User obj= await GetById(id);
+            User? obj= await GetById(id);
+
+            if (obj == null) return false;
+
             _db.Users.Remove(obj);
             int result = await _db.SaveChangesAsync();
             return result > 0;
@@ -29,7 +32,7 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            var allUsers = await _db.Users.ToListAsync();
+            var allUsers = _db.Users;
             return allUsers;
         }
 

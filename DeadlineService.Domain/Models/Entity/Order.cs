@@ -19,13 +19,14 @@ namespace DeadlineService.Domain.Models.Entity
         public DateTime Deadline { get; set; }
         public OrderStatus OrderStatus{ get; set; }
 
-
         public int? CommentId { get; set; }
         public Comment? Comment{ get; set; }
+
 
         [ForeignKey("CreatedByUser")]
         public int CreatedByUserId { get; set; }
         public User CreatedByUser { get; set; }
+
 
         [ForeignKey("AssignedToUser")]
         public int? AssignedToUserId { get; set; }

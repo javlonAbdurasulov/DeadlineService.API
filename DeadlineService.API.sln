@@ -10,6 +10,13 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeadlineService.Application", "DeadlineService.Application\DeadlineService.Application.csproj", "{1E80E0FC-9B74-4062-A83E-AC7CAE02C397}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DeadlineService.Infrastructure", "DeadlineService.Infrastructure\DeadlineService.Infrastructure.csproj", "{D64FEDEC-3F1A-48F1-BCD1-456B56609BDF}"
+<<<<<<< HEAD
+=======
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{B0B7835F-22ED-478C-A3DC-63A0B7AE99D7}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Application.UnitTests", "Application.UnitTests\Application.UnitTests.csproj", "{C4AF52D4-5837-48E5-97B2-1404ACD6E746}"
+>>>>>>> shokir
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,9 +40,16 @@ Global
 		{D64FEDEC-3F1A-48F1-BCD1-456B56609BDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D64FEDEC-3F1A-48F1-BCD1-456B56609BDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D64FEDEC-3F1A-48F1-BCD1-456B56609BDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C4AF52D4-5837-48E5-97B2-1404ACD6E746}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C4AF52D4-5837-48E5-97B2-1404ACD6E746}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C4AF52D4-5837-48E5-97B2-1404ACD6E746}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C4AF52D4-5837-48E5-97B2-1404ACD6E746}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{C4AF52D4-5837-48E5-97B2-1404ACD6E746} = {B0B7835F-22ED-478C-A3DC-63A0B7AE99D7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {37FC53B7-7AFC-470D-8F59-A3075C4B7E88}
