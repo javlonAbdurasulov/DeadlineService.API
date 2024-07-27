@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Interfaces.Base
 {
-    public interface IGetByIdService<T> where T : class
+    public interface IGetByIdRepository<T> where T : class
     {
         public Task<T> GetById(int id);
     }

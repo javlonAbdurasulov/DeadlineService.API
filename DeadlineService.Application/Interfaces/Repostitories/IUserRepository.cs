@@ -3,11 +3,11 @@
 namespace DeadlineService.Application.Interfaces.Repostitories
 {
     public interface IUserRepository :
-        ICreateService<User>,
-        IDeleteService,
+        ICreateRepository<User>,
+        IDeleteRepository,
         IUpdateRepository<User>,
-        IGetAllService<User>,
-        IGetByIdService<User>
+        IGetAllRepository<User>,
+        IGetByIdRepository<User>
     {
     }
 }
