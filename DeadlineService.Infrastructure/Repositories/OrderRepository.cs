@@ -27,8 +27,11 @@ namespace DeadlineService.Infrastructure.Repositories
             int resultCountOfRemoved;
             using (_db)
             {
-               Order order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id);
-               _db.Orders.Remove(order);
+               Order? order = await _db.Orders.FirstOrDefaultAsync(o => o.Id == id);
+
+                if(order == null)  return false; 
+               
+                _db.Orders.Remove(order);
                resultCountOfRemoved= await _db.SaveChangesAsync();    
             }
             return resultCountOfRemoved > 0;
