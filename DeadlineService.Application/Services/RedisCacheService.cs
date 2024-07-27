@@ -30,18 +30,14 @@ namespace DeadlineService.Application.Services
             await _cache.SetAsync(key, value, _options);
         }
 
-        public async Task<byte[]> GetAsync<T>(string key, T value)
+        public async Task<byte[]?> GetAsync(string key)
         {
             var cacheResponse = await _cache.GetAsync(key);
             if(cacheResponse != null)
             {
                 return cacheResponse;
             }
-            var byteForCache = JsonSerializer.SerializeToUtf8Bytes(value);
-
-            await _cache.SetAsync(key, byteForCache, _options);
-
-            return byteForCache;
+            return null;
         }
         public async Task DeleteAsync(string key)
         {
