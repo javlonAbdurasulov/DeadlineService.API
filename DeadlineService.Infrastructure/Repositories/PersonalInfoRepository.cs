@@ -28,7 +28,7 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            PersonalInfo personalInfo = await GetById(id);
+            PersonalInfo? personalInfo = await GetById(id);
             _db.PersonalInfos.Remove(personalInfo);
             var result = await _db.SaveChangesAsync();
             return result > 0;
@@ -40,15 +40,17 @@ namespace DeadlineService.Infrastructure.Services
             return result;
         }
 
-        public async Task<PersonalInfo> GetById(int id)
+        public async Task<PersonalInfo?> GetById(int id)
         {
-            var result = _db.PersonalInfos.FirstOrDefault(x => x.Id == id);
+            PersonalInfo? result = _db.PersonalInfos.FirstOrDefault(x => x.Id == id);
             return result;
         }
 
-        public Task<PersonalInfo> UpdateAsync(PersonalInfo obj)
+        public async Task<PersonalInfo> UpdateAsync(PersonalInfo obj)
         {
-            throw new NotImplementedException();
+            _db.PersonalInfos.Update(obj);
+            await _db.SaveChangesAsync();
+            return obj;
         }
     }
 }
