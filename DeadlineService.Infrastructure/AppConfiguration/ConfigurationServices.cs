@@ -17,7 +17,7 @@ namespace DeadlineService.Infrastructure.AppConfiguration
         public static void AddApplicationServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Default")));
-            services.AddScoped<IUserService,UserService>();
+            services.AddScoped<IUserRepository,UserService>();
 
         }
     }

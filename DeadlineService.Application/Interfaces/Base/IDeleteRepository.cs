@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Interfaces.Base
 {
-    public interface IGetByIdService<T> where T : class
+    public interface IDeleteRepository
     {
-        public Task<T> GetById(int id);
+        public Task<bool> DeleteAsync(int id);
     }
 }

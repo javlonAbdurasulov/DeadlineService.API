@@ -1,14 +1,14 @@
-﻿using DeadlineService.Application.Interfaces.Services;
+﻿using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Domain.Models.Entity;
 using DeadlineService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
 
 namespace DeadlineService.Infrastructure.Services
 {
-    public class UserService : IUserService
+    public class UserRepository : IUserRepository
     {
         private readonly DSDbContext _db;
-        public UserService(DSDbContext db)
+        public UserRepository(DSDbContext db)
         {
             _db=db;
         }
@@ -29,20 +29,21 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            var result = await _db.Users.ToListAsync();
-            return result;
+            var allUsers = await _db.Users.ToListAsync();
+            return allUsers;
         }
 
         public async Task<User?> GetById(int id)
         {
-            User? obj = await _db.Users.FirstOrDefaultAsync(x=>x.Id==id);
-            return obj;
+            User? user = await _db.Users.FirstOrDefaultAsync(x=>x.Id==id);
+            return user;
         }
 
         public async Task<User> UpdateAsync(User obj)
         {
+            _db.Users.Update(obj);
+            await _db.SaveChangesAsync();
             return obj;
-            
         }
     }
 }

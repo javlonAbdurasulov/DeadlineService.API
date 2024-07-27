@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Interfaces.Base
 {
-    public interface IGetAllService<T> where T : class
+    public interface IUpdateRepository<T> where T : class
     {
-        public Task<IEnumerable<T>> GetAllAsync();
+        public Task<T> UpdateAsync(T obj);
     }
 }

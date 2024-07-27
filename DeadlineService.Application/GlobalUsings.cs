@@ -1,0 +1,1 @@
+﻿global using DeadlineService.Domain.Models.Entity;
