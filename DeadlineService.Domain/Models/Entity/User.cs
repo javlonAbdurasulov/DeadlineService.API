@@ -8,7 +8,7 @@ namespace DeadlineService.Domain.Models.Entity
 {
     public class User
     {
-        public User( string username, string passwordHash)
+        public User(string username, string passwordHash)
         {
             Username = username;
             PasswordHash = passwordHash;

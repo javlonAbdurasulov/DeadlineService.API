@@ -3,10 +3,10 @@
 namespace DeadlineService.Application.Interfaces.Repostitories
 {
     public interface IOrderRepository :
-        ICreateService<Order>,
-        IGetAllService<Order>,
+        ICreateRepository<Order>,
+        IGetAllRepository<Order>,
         IUpdateRepository<Order>,
-        IDeleteService
+        IDeleteRepository
     {
     }
 }
