@@ -1,4 +1,4 @@
-﻿using DeadlineService.Application.Interfaces.Services;
+﻿using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Infrastructure.Data;
 using DeadlineService.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
@@ -17,7 +17,7 @@ namespace DeadlineService.Infrastructure.AppConfiguration
         public static void AddApplicationServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Default")));
-            services.AddScoped<IUserRepository,UserService>();
+            services.AddScoped<IUserRepository,UserRepository>();
 
         }
     }

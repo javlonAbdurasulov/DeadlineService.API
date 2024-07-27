@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Domain.Models.Entity
 {
-    internal class Mesage
+    public class Message
     {
     }
 }
