@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Services
 {
-    public class RedisCacheService<T>:IRedisCacheService<T>
+    public class RedisCacheService:IRedisCacheService
     {
         public IDistributedCache _cache;
         public DistributedCacheEntryOptions _options;
@@ -30,7 +30,7 @@ namespace DeadlineService.Application.Services
             await _cache.SetAsync(key, value, _options);
         }
 
-        public async Task<byte[]> GetAsync(string key, T value)
+        public async Task<byte[]> GetAsync<T>(string key, T value)
         {
             var cacheResponse = await _cache.GetAsync(key);
             if(cacheResponse != null)
@@ -42,6 +42,10 @@ namespace DeadlineService.Application.Services
             await _cache.SetAsync(key, byteForCache, _options);
 
             return byteForCache;
+        }
+        public async Task DeleteAsync(string key)
+        {
+            await _cache.RemoveAsync(key);
         }
     }
 }

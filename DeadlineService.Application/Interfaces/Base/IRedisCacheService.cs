@@ -6,9 +6,10 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Interfaces.Base
 {
-    public interface IRedisCacheService<T>
+    public interface IRedisCacheService
     {
-        Task<byte[]> GetAsync(string key,T value);
+        Task<byte[]> GetAsync<T>(string key,T value);
         Task SetAsync(string key, byte[] value);
+        Task DeleteAsync(string key);
     }
 }
