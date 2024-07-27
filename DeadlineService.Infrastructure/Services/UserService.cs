@@ -41,6 +41,8 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<User> UpdateAsync(User obj)
         {
+            _db.Users.Update(obj);
+            await _db.SaveChangesAsync();
             return obj;
             
         }
