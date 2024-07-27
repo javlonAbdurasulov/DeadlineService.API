@@ -1,22 +1,17 @@
 ﻿using DeadlineService.Domain.Models.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeadlineService.Infrastructure.Data
 {
-    public class DSDbContext:DbContext
+    public class DSDbContext : DbContext
     {
         public DSDbContext()
         {
 
         }
-        public DSDbContext(DbContextOptions<DSDbContext> dbContextOptions) : base(dbContextOptions) 
-        { 
-            
+        public DSDbContext(DbContextOptions<DSDbContext> dbContextOptions) : base(dbContextOptions)
+        {
+
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -34,9 +29,9 @@ namespace DeadlineService.Infrastructure.Data
 
             base.OnModelCreating(modelBuilder);
         }
-        DbSet<User> Users { get; set; }
-        DbSet<PersonalInfo> PersonalInfos{ get; set; }
-        DbSet<Order> Orders{ get; set; }
-        DbSet<Comment> Comments{ get; set; }
+        public DbSet<User> Users { get; set; }
+        public DbSet<PersonalInfo> PersonalInfos { get; set; }
+        public DbSet<Order> Orders { get; set; }
+        public DbSet<Comment> Comments { get; set; }
     }
 }
