@@ -44,7 +44,6 @@ namespace DeadlineService.Infrastructure.Services
             _db.Users.Update(obj);
             await _db.SaveChangesAsync();
             return obj;
-            
         }
     }
 }
