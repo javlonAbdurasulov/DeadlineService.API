@@ -12,7 +12,8 @@ namespace DeadlineService.Application.Interfaces.Services
         ICreateService<User>,
         IDeleteService,
         IUpdateService<User>,
-        IGetAllService<User>
+        IGetAllService<User>,
+        IGetByIdService<User>
     {
     }
 }

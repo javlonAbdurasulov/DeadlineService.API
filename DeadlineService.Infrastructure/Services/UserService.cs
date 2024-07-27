@@ -1,6 +1,7 @@
 ﻿using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Domain.Models.Entity;
 using DeadlineService.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace DeadlineService.Infrastructure.Services
 {
@@ -18,19 +19,30 @@ namespace DeadlineService.Infrastructure.Services
             return obj;
         }
 
-        public Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id)
         {
-            throw new NotImplementedException();
+            User obj= await GetById(id);
+            _db.Users.Remove(obj);
+            int result = await _db.SaveChangesAsync();
+            return result > 0;
         }
 
-        public Task<IEnumerable<User>> GetAllAsync()
+        public async Task<IEnumerable<User>> GetAllAsync()
         {
-            throw new NotImplementedException();
+            var result = await _db.Users.ToListAsync();
+            return result;
         }
 
-        public Task<User> UpdateAsync(User obj)
+        public async Task<User?> GetById(int id)
         {
-            throw new NotImplementedException();
+            User? obj = await _db.Users.FirstOrDefaultAsync(x=>x.Id==id);
+            return obj;
+        }
+
+        public async Task<User> UpdateAsync(User obj)
+        {
+            return obj;
+            
         }
     }
 }
