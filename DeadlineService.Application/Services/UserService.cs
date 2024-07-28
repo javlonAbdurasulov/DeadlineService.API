@@ -28,13 +28,11 @@ namespace DeadlineService.Application.Services
 
         public async Task<User> GetByEmail(string email)
         {
-            var allInfo= await _personalInfo.GetAllAsync();
+            if(string.IsNullOrEmpty(email)) throw new ArgumentNullException("email is incorrect");
 
-           PersonalInfo? personalInfo = allInfo.FirstOrDefault(x => x.Email == email);
+            User userWithEmail=await _userRepository.GetByEmail(email);
 
-            if (personalInfo != null) return null;
-
-            return personalInfo.User;
+            return userWithEmail;
 
         }
     }

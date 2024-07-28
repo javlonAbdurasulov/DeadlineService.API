@@ -9,9 +9,9 @@ namespace DeadlineService.Application.Services
 {
     public class PasswordHasherService : IPasswordHasher
     {
-        public bool ConfirmPassword(string hashedPassword, string confirmPassword)
+        public bool VerifyPassword(string hashedPassword, string verifyPassword)
         {
-            var result = StringToHash(confirmPassword)==hashedPassword;
+            var result = StringToHash(verifyPassword) ==hashedPassword;
             return result;
         }
 

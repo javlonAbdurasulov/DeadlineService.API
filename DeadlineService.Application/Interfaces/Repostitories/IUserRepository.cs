@@ -9,5 +9,6 @@ namespace DeadlineService.Application.Interfaces.Repostitories
         IGetAllRepository<User>,
         IGetByIdRepository<User>
     {
+        public Task<User> GetByEmail(string email);
     }
 }

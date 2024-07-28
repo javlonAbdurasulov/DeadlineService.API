@@ -36,6 +36,15 @@ namespace DeadlineService.Infrastructure.Services
             return allUsers;
         }
 
+        public async Task<User> GetByEmail(string email)
+        {
+            var user = await _db.Users.
+                Include(x => x.PersonalInfo).
+                FirstOrDefaultAsync(x => x.PersonalInfo.Email == email);
+
+            return user;
+        }
+
         public async Task<User?> GetById(int id)
         {
             User? user = await _db.Users.FirstOrDefaultAsync(x=>x.Id==id);

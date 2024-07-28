@@ -9,6 +9,6 @@ namespace DeadlineService.Application.Interfaces.Services
     public interface IPasswordHasher
     {
         public string StringToHash(string password);
-        public bool ConfirmPassword(string hashedPasswordword,string confirmPassword);
+        public bool VerifyPassword(string hashedPasswordword,string verifyPassword);
     }
 }
