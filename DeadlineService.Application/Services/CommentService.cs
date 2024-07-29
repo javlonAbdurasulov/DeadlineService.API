@@ -70,8 +70,7 @@ namespace DeadlineService.Application.Services
                 Text = postCommentDTO.Text,
                 Order = order,
                 OrderId = order.Id,
-                Stars= postCommentDTO.Stars
-
+                Stars = postCommentDTO.Stars
             };
            var returnedComment = await _commentRepository.CreateAsync(newComment);
             

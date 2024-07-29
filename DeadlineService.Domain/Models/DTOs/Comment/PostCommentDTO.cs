@@ -9,7 +9,6 @@ namespace DeadlineService.Domain.Models.DTOs.Comment
 {
     public class PostCommentDTO
     {
-        public int? Id { get; set; }
         public int SellerId { get; set; }
         public int? FrilancerId { get; set; }
         public Stars Stars { get; set; }
