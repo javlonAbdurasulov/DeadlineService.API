@@ -9,25 +9,19 @@ namespace DeadlineService.Domain.Models
 {
     public class ResponseModel <T>
     {
-        public HttpStatusCode Status { get; set; }
-        public string? Message { get; set; }
-        public T? Data { get; set; }
+        public ResponseModel(T result, HttpStatusCode statusCode = HttpStatusCode.OK)
+        {
+            Result = result;
+            StatusCode = statusCode;
+        }
 
-        public ResponseModel()
+        public ResponseModel(string? error, HttpStatusCode statusCode = HttpStatusCode.BadRequest)
         {
+            Error = error;
+            StatusCode = statusCode;
         }
-        public ResponseModel(HttpStatusCode status, string? message = null)
-        {
-            Status = status;
-            Message = message;
-        }
-        public ResponseModel(HttpStatusCode status, T data, string? message = null)
-        {
-            Status = status;
-            Message = message;
-            Data = data;
-        }
-       
-
+        public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
+        public string? Error { get; set; }
+        public T? Result { get; set; }
     }
 }

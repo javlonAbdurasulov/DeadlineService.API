@@ -18,10 +18,10 @@ namespace DeadlineService.Application.Services
         public RedisCacheService(IDistributedCache cache, IConfiguration configuration)
         {
             _cache = cache;
-            int absoluteExpirationRelativeToNow = Convert.ToInt32(configuration.GetConnectionString("Default"));
+            int absoluteExpirationRelativeToNow = Convert.ToInt32(configuration.GetConnectionString("Redis"));
             _options = new DistributedCacheEntryOptions()
             {
-                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(absoluteExpirationRelativeToNow)
+                AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(absoluteExpirationRelativeToNow)                
             };
         }
 
@@ -33,11 +33,7 @@ namespace DeadlineService.Application.Services
         public async Task<byte[]?> GetAsync(string key)
         {
             var cacheResponse = await _cache.GetAsync(key);
-            if(cacheResponse != null)
-            {
-                return cacheResponse;
-            }
-            return null;
+            return cacheResponse;
         }
         public async Task DeleteAsync(string key)
         {
