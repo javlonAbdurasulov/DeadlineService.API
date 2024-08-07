@@ -10,6 +10,6 @@ namespace DeadlineService.Application.Interfaces.Repostitories
         IGetByIdRepository<User>
     {
         public Task<User> GetByEmail(string email);
-        public Task<bool> CheckUsername(string username);
+        public Task<User> GetByUsernameAsync(string username);
     }
 }

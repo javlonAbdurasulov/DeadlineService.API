@@ -38,11 +38,10 @@ namespace DeadlineService.Infrastructure.Services
             return allUsers;
         }
 
-        public async Task<bool> CheckUsername(string username)
+        public async Task<User?> GetByUsernameAsync(string username)
         {
             var user =await _db.Users.FirstOrDefaultAsync(x=>x.Username==username);
-            if(user == null) return true;
-            return false;
+            return user;
         }
         public async Task<User?> GetByEmail(string email)
         {

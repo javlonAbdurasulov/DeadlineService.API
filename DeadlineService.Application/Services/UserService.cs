@@ -31,10 +31,10 @@ namespace DeadlineService.Application.Services
             _cache = appCache;
         }
 
-        public async Task<ResponseModel<UserGetDTO>> CreateAsync(RegisterUser registerUser)
+        public async Task<ResponseModel<UserGetDTO>> RegistrationAsync(RegisterUser registerUser)
         {
-            bool UsernameIsNotHave = await _userRepository.CheckUsername(registerUser.Username);
-            if (!UsernameIsNotHave)
+            User UsernameIsHave = await _userRepository.GetByUsernameAsync(registerUser.Username);
+            if (UsernameIsHave!=null)
             {
                 return new("username уже существует");
             }
@@ -62,6 +62,48 @@ namespace DeadlineService.Application.Services
                 PersonalInfoId = userWithEmail.PersonalInfoId,
                 Username = userWithEmail.Username,
                 Id = userWithEmail.Id
+            };
+            return new(userGetDTO);
+        }
+
+        public async Task<ResponseModel<UserGetDTO>> LoginAsync(RegisterUser loginUser)
+        {
+            User user = await _userRepository.GetByUsernameAsync(loginUser.Username);
+            if(user == null)
+            {
+                return new("Пользователь с таким username не существует!");
+            }
+            else
+            {
+                if(user.PasswordHash == _passwordHasher.StringToHash(loginUser.Password))
+                {
+                    UserGetDTO userGetDTO = new UserGetDTO()
+                    {
+                        PersonalInfoId = user.PersonalInfoId,
+                        Username = user.Username,
+                        Id = user.Id
+                    };
+                    return new(userGetDTO);
+                }
+                else
+                {
+                    return new("Неправильный пароль!");
+                }
+            }
+        }
+
+        public async Task<ResponseModel<UserGetDTO>> GetUserByIdAsync(int Id)
+        {
+            User? user = await _userRepository.GetById(Id);
+            if(user == null)
+            {
+                return new("User с таким Id не найден!");
+            }
+            UserGetDTO userGetDTO = new()
+            {
+                Id = user.Id,
+                PersonalInfoId = user.PersonalInfoId,
+                Username = user.Username
             };
             return new(userGetDTO);
         }
