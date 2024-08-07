@@ -9,6 +9,7 @@ namespace DeadlineService.Domain.Models.Entity
 {
     public class PersonalInfo
     {
+        public PersonalInfo() { }
         public PersonalInfo(string email,string phoneNumber,int userId,string? description, byte[]? photo)
         {
             CreateAt = DateTime.Now;

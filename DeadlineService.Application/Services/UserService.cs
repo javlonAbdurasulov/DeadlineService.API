@@ -17,15 +17,12 @@ namespace DeadlineService.Application.Services
     {
         private readonly IUserRepository _userRepository;
         private readonly IPasswordHasher _passwordHasher;
-        private readonly IPersonalInfoRepository _personalInfo;
         private readonly IRedisCacheService _cache;
         public UserService(
             IUserRepository userRepository,
             IPasswordHasher passwordHasher,
-            IPersonalInfoRepository personalInfo,
             IRedisCacheService appCache)
         {
-            _personalInfo = personalInfo;
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
             _cache = appCache;

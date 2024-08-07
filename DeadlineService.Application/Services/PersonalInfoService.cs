@@ -1,4 +1,5 @@
-﻿using DeadlineService.Application.Interfaces.Repostitories;
+﻿using DeadlineService.Application.Interfaces.Base;
+using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Application.Interfaces.Services;
 using System;
 using System.Collections.Generic;
@@ -12,10 +13,12 @@ namespace DeadlineService.Application.Services
     {
         private readonly IPersonalInfoRepository _personalInfoRepository;
         private readonly IUserService _userService;
-        public PersonalInfoService(IPersonalInfoRepository personalInfoRepository, IUserService userService)
+        private readonly IRedisCacheService _cache;
+        public PersonalInfoService(IPersonalInfoRepository personalInfoRepository, IUserService userService, IRedisCacheService cache)
         {
             _personalInfoRepository = personalInfoRepository;
             _userService = userService;
+            _cache = cache;
         }
         public async Task<ResponseModel<PersonalInfoGetDTO>> CreatePersonalInfoAsync(PersonalInfoCreateDTO personalInfoDTO)
         {
@@ -73,28 +76,73 @@ namespace DeadlineService.Application.Services
             {
                 return new(personalInfo.Error);
             }
-            personalInfo.Result.Description = description;
             PersonalInfoUpdateDTO personalInfoForUpdate = new(){
                 Id = personalInfo.Result.Id,
                 Email = personalInfo.Result.Email,
                 PhoneNumber = personalInfo.Result.PhoneNumber,
-                Description = personalInfo.Result.Description, 
+                Description = description, 
                 Photo = personalInfo.Result.Photo
             };
             var personalInfoUpdated = await UpdatePersonalInfoAsync(personalInfoForUpdate);
-            
-            return new(new PersonalInfoGetDTO { });
+            if(personalInfoUpdated.Result == null)
+            {
+                return new(personalInfoUpdated.Error);
+            }
+            return new(personalInfoUpdated.Result);
         }
 
-        public Task<ResponseModel<PersonalInfoGetDTO>> SetOrUpdatePhotoAsync(int personalInfoId, byte[] photo)
+        public async Task<ResponseModel<PersonalInfoGetDTO>> SetOrUpdatePhotoAsync(int personalInfoId, byte[] photo)
         {
-            throw new NotImplementedException();
+            var personalInfo = await GetPersonalInfoByIdAsync(personalInfoId);
+            if (personalInfo.Result == null)
+            {
+                return new(personalInfo.Error);
+            }
+            PersonalInfoUpdateDTO personalInfoForUpdate = new()
+            {
+                Id = personalInfo.Result.Id,
+                Email = personalInfo.Result.Email,
+                PhoneNumber = personalInfo.Result.PhoneNumber,
+                Description = personalInfo.Result.Description,
+                Photo = photo
+            };
+            var personalInfoUpdated = await UpdatePersonalInfoAsync(personalInfoForUpdate);
+            if (personalInfoUpdated.Result == null)
+            {
+                return new(personalInfoUpdated.Error);
+            }
+            return new(personalInfoUpdated.Result);
         }
 
-        public Task<ResponseModel<PersonalInfoGetDTO>> UpdatePersonalInfoAsync(PersonalInfoUpdateDTO personalInfoDTO)
+        public async Task<ResponseModel<PersonalInfoGetDTO>> UpdatePersonalInfoAsync(PersonalInfoUpdateDTO personalInfoDTO)
         {
-
-            throw new NotImplementedException();
+            var personalInfoGetById = await GetPersonalInfoByIdAsync(personalInfoDTO.Id);
+            if(personalInfoGetById.Result == null)
+            {
+                return new(personalInfoGetById.Error);
+            }
+            PersonalInfo personalInfo = new()
+            {
+                Id = personalInfoDTO.Id,
+                Email = personalInfoDTO.Email,
+                PhoneNumber = personalInfoDTO.PhoneNumber,
+                Description = personalInfoDTO.Description,
+                Photo = personalInfoDTO.Photo,
+                CreateAt = personalInfoGetById.Result.CreateAt,
+                UserId = personalInfoGetById.Result.UserId
+            };
+            personalInfo = await _personalInfoRepository.UpdateAsync(personalInfo);
+            PersonalInfoGetDTO personalInfoGetDTO = new()
+            {
+                Id = personalInfo.Id,
+                CreateAt = personalInfo.CreateAt,
+                Email = personalInfo.Email,
+                PhoneNumber = personalInfo.PhoneNumber,
+                UserId = personalInfo.UserId,
+                Description = personalInfo.Description,
+                Photo = personalInfo.Photo
+            };
+            return new(personalInfoGetDTO);
         }
     }
 }
