@@ -12,6 +12,8 @@ namespace DeadlineService.Infrastructure.Services
         {
             _db=db;
         }
+
+
         public async Task<User> CreateAsync(User obj)
         {
             await _db.Users.AddAsync(obj);
@@ -32,19 +34,23 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<IEnumerable<User>> GetAllAsync()
         {
-            var allUsers = _db.Users;
+            var allUsers = await _db.Users.ToListAsync();
             return allUsers;
         }
 
-        public async Task<User> GetByEmail(string email)
+        public async Task<User?> GetByUsernameAsync(string username)
         {
-            var user = await _db.Users.
+            var user =await _db.Users.FirstOrDefaultAsync(x=>x.Username==username);
+            return user;
+        }
+        public async Task<User?> GetByEmail(string email)
+        {
+            User? user = await _db.Users.
                 Include(x => x.PersonalInfo).
                 FirstOrDefaultAsync(x => x.PersonalInfo.Email == email);
 
             return user;
         }
-
         public async Task<User?> GetById(int id)
         {
             User? user = await _db.Users.FirstOrDefaultAsync(x=>x.Id==id);

@@ -10,6 +10,10 @@ namespace DeadlineService.Application.Interfaces.Services
 {
     public interface IUserService 
     {
-     public Task<User> GetByEmail (string email);
+        public Task<ResponseModel<UserGetDTO>> GetByEmailAsync(string email);
+        public Task<ResponseModel<UserGetDTO>> RegistrationAsync(RegisterUser registerUser);
+        public Task<ResponseModel<UserGetDTO>> LoginAsync(RegisterUser loginUser);
+        public Task<ResponseModel<UserGetDTO>> GetUserByIdAsync(int Id);
+
     }
 }

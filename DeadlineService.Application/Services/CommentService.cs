@@ -45,15 +45,9 @@ namespace DeadlineService.Application.Services
             var frilancer = allUsers.FirstOrDefault(x => x.Id == postCommentDTO.FrilancerId);
 
             if (seller == null)
-                return new ResponseModel<Comment>(HttpStatusCode.BadRequest)
-                {
-                    Message = "Такого заказчика не существует"
-                };
+                return new("Такого заказчика не существует");
 
-            else if (frilancer == null) return new ResponseModel<Comment>(HttpStatusCode.BadRequest)
-            {
-                Message = "такого фрилансера не существует"
-            };
+            else if (frilancer == null) return new("такого фрилансера не существует");
 
             var allOrder = await _orderRepository.GetAllAsync();
             var order = allOrder
@@ -61,10 +55,7 @@ namespace DeadlineService.Application.Services
 
 
             if (order == null)
-                return new ResponseModel<Comment>(HttpStatusCode.BadRequest)
-                {
-                    Message = "Такого заказа не существует"
-                };
+                return new("Такого заказа не существует");
             Comment newComment = new Comment()
             {
                 Text = postCommentDTO.Text,
@@ -73,10 +64,8 @@ namespace DeadlineService.Application.Services
                 Stars = postCommentDTO.Stars
             };
            var returnedComment = await _commentRepository.CreateAsync(newComment);
-            
-           return new ResponseModel<Comment>() 
-           { Data= returnedComment ,
-           Status=HttpStatusCode.OK};
+
+            return new(returnedComment);
 
         }
 

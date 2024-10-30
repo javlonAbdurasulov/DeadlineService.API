@@ -2,6 +2,7 @@
 using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Application.Services;
 using DeadlineService.Infrastructure.Data;
+using DeadlineService.Infrastructure.Repositories;
 using DeadlineService.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -19,8 +20,12 @@ namespace DeadlineService.Infrastructure.AppConfiguration
         public static void AddApplicationServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Default")));
+            
             services.AddScoped<IUserRepository,UserRepository>();
-
+            services.AddScoped<ICommentRepository,CommentRepository>();
+            services.AddScoped<IOrderRepository,OrderRepository>();
+            services.AddScoped<IPersonalInfoRepository,PersonalInfoRepository>();
+            
             //Добавление сервиса в котором могут сверятся файл
             services.AddTransient<IPasswordHasher, PasswordHasherService>();
         }
