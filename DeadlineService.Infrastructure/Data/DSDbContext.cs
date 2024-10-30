@@ -27,6 +27,13 @@ namespace DeadlineService.Infrastructure.Data
                 .HasForeignKey(o => o.AssignedToUserId)
                 .OnDelete(DeleteBehavior.Restrict);
 
+
+            modelBuilder.Entity<Order>()
+                .HasOne(o => o.Comment)        
+                .WithOne(c => c.Order)         
+                .HasForeignKey<Comment>(c => c.OrderId); 
+
+
             base.OnModelCreating(modelBuilder);
         }
         public DbSet<User> Users { get; set; }
