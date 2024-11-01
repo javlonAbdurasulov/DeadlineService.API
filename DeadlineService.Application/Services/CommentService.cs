@@ -22,7 +22,7 @@ namespace DeadlineService.Application.Services
             _userRepository = userRepository;
 
         }
-        public async Task<IEnumerable<GetCommentDTO>> GetComments()
+        public async Task<ResponseModel<IEnumerable<GetCommentDTO>>> GetComments()
         {
             var allOrders = await _orderRepository.GetAllAsync();
 
@@ -33,7 +33,7 @@ namespace DeadlineService.Application.Services
                 Id = x.CommentId,
             });
 
-            return allComments;
+            return new(allComments);
         }
 
         public async Task<ResponseModel<Comment>> PostComment(PostCommentDTO postCommentDTO)

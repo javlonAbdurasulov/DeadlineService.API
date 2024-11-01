@@ -1,4 +1,5 @@
-﻿using DeadlineService.Application.Interfaces.Repostitories;
+﻿using DeadlineService.Application.Interfaces.Base;
+using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Application.Services;
 using DeadlineService.Infrastructure.Data;
@@ -20,13 +21,17 @@ namespace DeadlineService.Infrastructure.AppConfiguration
         public static void AddApplicationServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Default")));
-            
+            services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = "localhost:6379";
+                options.InstanceName = "SampleInstance"; 
+            });
             services.AddScoped<IUserRepository,UserRepository>();
             services.AddScoped<ICommentRepository,CommentRepository>();
             services.AddScoped<IOrderRepository,OrderRepository>();
             services.AddScoped<IPersonalInfoRepository,PersonalInfoRepository>();
-            
-            //Добавление сервиса в котором могут сверятся файл
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRedisCacheService, RedisCacheService>();
             services.AddTransient<IPasswordHasher, PasswordHasherService>();
         }
     }

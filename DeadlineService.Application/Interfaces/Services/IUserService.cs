@@ -12,7 +12,7 @@ namespace DeadlineService.Application.Interfaces.Services
     {
         public Task<ResponseModel<UserGetDTO>> GetByEmailAsync(string email);
         public Task<ResponseModel<UserGetDTO>> RegistrationAsync(RegisterUser registerUser);
-        public Task<ResponseModel<UserGetDTO>> LoginAsync(RegisterUser loginUser);
+        public Task<ResponseModel<UserGetDTO>> LoginAsync(LoginUser loginUser);
         public Task<ResponseModel<UserGetDTO>> GetUserByIdAsync(int Id);
 
     }

@@ -18,7 +18,7 @@ namespace DeadlineService.Application.Services
         public RedisCacheService(IDistributedCache cache, IConfiguration configuration)
         {
             _cache = cache;
-            int absoluteExpirationRelativeToNow = Convert.ToInt32(configuration.GetConnectionString("Redis"));
+            int absoluteExpirationRelativeToNow = Convert.ToInt32(configuration.GetSection("Redis")["AbsoluteExpirationMinutes"]);
             _options = new DistributedCacheEntryOptions()
             {
                 AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(absoluteExpirationRelativeToNow)                

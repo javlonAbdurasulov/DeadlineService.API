@@ -9,6 +9,10 @@ namespace DeadlineService.Domain.Models
 {
     public class ResponseModel <T>
     {
+        public ResponseModel()
+        {
+        }
+
         public ResponseModel(T result, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
             Result = result;

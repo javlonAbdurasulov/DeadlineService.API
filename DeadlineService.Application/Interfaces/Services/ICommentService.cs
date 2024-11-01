@@ -5,7 +5,7 @@ namespace DeadlineService.Application.Interfaces.Services
 {
     public interface ICommentService
     {
-        public Task<IEnumerable<GetCommentDTO>> GetComments();
+        public Task<ResponseModel<IEnumerable<GetCommentDTO>>> GetComments();
         public Task<ResponseModel<Comment>> PostComment(PostCommentDTO postCommentDTO);
      }
 }

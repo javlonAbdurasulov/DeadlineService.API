@@ -63,7 +63,7 @@ namespace DeadlineService.Application.Services
             return new(userGetDTO);
         }
 
-        public async Task<ResponseModel<UserGetDTO>> LoginAsync(RegisterUser loginUser)
+        public async Task<ResponseModel<UserGetDTO>> LoginAsync(LoginUser loginUser)
         {
             User user = await _userRepository.GetByUsernameAsync(loginUser.Username);
             if(user == null)
