@@ -16,6 +16,8 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<User> CreateAsync(User obj)
         {
+            obj.Roles = new List<Role> { new Role() { Id = 1 } };
+            obj.PersonalInfo = new PersonalInfo();
             await _db.Users.AddAsync(obj);
             await _db.SaveChangesAsync();
             return obj;

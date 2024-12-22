@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeadlineService.Infrastructure.Migrations
 {
     [DbContext(typeof(DSDbContext))]
-    [Migration("20241030092037_init")]
-    partial class init
+    [Migration("20241222162415_initdb")]
+    partial class initdb
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -137,6 +137,23 @@ namespace DeadlineService.Infrastructure.Migrations
                     b.ToTable("PersonalInfos");
                 });
 
+            modelBuilder.Entity("DeadlineService.Domain.Models.Entity.Role", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Roles");
+                });
+
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.User", b =>
                 {
                     b.Property<int>("Id")
@@ -149,7 +166,7 @@ namespace DeadlineService.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int?>("PersonalInfoId")
+                    b.Property<int>("PersonalInfoId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Username")
@@ -159,6 +176,21 @@ namespace DeadlineService.Infrastructure.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Users");
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<int>("RolesId")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("UsersId")
+                        .HasColumnType("integer");
+
+                    b.HasKey("RolesId", "UsersId");
+
+                    b.HasIndex("UsersId");
+
+                    b.ToTable("RoleUser");
                 });
 
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.Comment", b =>
@@ -199,6 +231,21 @@ namespace DeadlineService.Infrastructure.Migrations
                         .IsRequired();
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("DeadlineService.Domain.Models.Entity.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("DeadlineService.Domain.Models.Entity.User", null)
+                        .WithMany()
+                        .HasForeignKey("UsersId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.Order", b =>

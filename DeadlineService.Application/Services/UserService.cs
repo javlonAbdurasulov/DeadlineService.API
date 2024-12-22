@@ -40,7 +40,7 @@ namespace DeadlineService.Application.Services
             UserGetDTO userGetDTO = new UserGetDTO()
             {
                 Id = user.Id,
-                PersonalInfoId = user.Id,
+                PersonalInfoId = user.PersonalInfoId,
                 Username = user.Username
             };
             return new(userGetDTO);
