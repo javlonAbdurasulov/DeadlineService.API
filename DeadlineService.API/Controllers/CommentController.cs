@@ -11,6 +11,7 @@ using System.Text.Json;
 namespace DeadlineService.API.Controllers
 {
     [ApiController]
+    [Route("api/[controller]/[action]")]
     public class CommentController:ControllerBase
     {
         private readonly ICommentService _commentService;
