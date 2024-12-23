@@ -31,12 +31,14 @@ namespace DeadlineService.Application.Services
         public async Task<ResponseModel<UserGetDTO>> RegistrationAsync(RegisterUser registerUser)
         {
             User UsernameIsHave = await _userRepository.GetByUsernameAsync(registerUser.Username);
+
             if (UsernameIsHave!=null)
-            {
-                return new("username уже существует");
-            }
+                return new("Пользователь с данным именем уже существует");
+            
             User user = new User(registerUser.Username, _passwordHasher.StringToHash(registerUser.Password));
+
             user = await _userRepository.CreateAsync(user);
+
             UserGetDTO userGetDTO = new UserGetDTO()
             {
                 Id = user.Id,
@@ -49,11 +51,12 @@ namespace DeadlineService.Application.Services
         public async Task<ResponseModel<UserGetDTO>> GetByEmailAsync(string email)
         {
             if(string.IsNullOrEmpty(email)) return new("email is empty");
-            User userWithEmail=await _userRepository.GetByEmail(email);
+
+            User userWithEmail=await _userRepository.GetByEmailAsync(email);
+
             if(userWithEmail == null)
-            {
-                return new("Пользователь с таким email не сушествует!");
-            }
+                return new("Пользователь с таким email не сушествует!"); 
+
             UserGetDTO userGetDTO = new UserGetDTO()
             {
                 PersonalInfoId = userWithEmail.PersonalInfoId,
@@ -66,12 +69,10 @@ namespace DeadlineService.Application.Services
         public async Task<ResponseModel<UserGetDTO>> LoginAsync(LoginUser loginUser)
         {
             User user = await _userRepository.GetByUsernameAsync(loginUser.Username);
+
             if(user == null)
-            {
                 return new("Пользователь с таким username не существует!");
-            }
-            else
-            {
+            
                 if(user.PasswordHash == _passwordHasher.StringToHash(loginUser.Password))
                 {
                     UserGetDTO userGetDTO = new UserGetDTO()
@@ -83,15 +84,12 @@ namespace DeadlineService.Application.Services
                     return new(userGetDTO);
                 }
                 else
-                {
                     return new("Неправильный пароль!");
-                }
-            }
         }
 
         public async Task<ResponseModel<UserGetDTO>> GetUserByIdAsync(int Id)
         {
-            User? user = await _userRepository.GetById(Id);
+            User? user = await _userRepository.GetByIdAsync(Id);
             if(user == null)
             {
                 return new("User с таким Id не найден!");

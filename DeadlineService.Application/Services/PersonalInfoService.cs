@@ -51,7 +51,7 @@ namespace DeadlineService.Application.Services
 
         public async Task<ResponseModel<PersonalInfoGetDTO>> GetPersonalInfoByIdAsync(int Id)
         {
-            PersonalInfo? personalInfo = await _personalInfoRepository.GetById(Id);
+            PersonalInfo? personalInfo = await _personalInfoRepository.GetByIdAsync(Id);
             if(personalInfo == null)
             {
                 return new("PersonalInfo с таким Id не найден!");

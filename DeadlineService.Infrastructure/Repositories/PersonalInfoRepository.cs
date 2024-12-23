@@ -28,7 +28,7 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            PersonalInfo? personalInfo = await GetById(id);
+            PersonalInfo? personalInfo = await GetByIdAsync(id);
             if (personalInfo == null)
             {
                 return false;
@@ -44,7 +44,7 @@ namespace DeadlineService.Infrastructure.Services
             return result;
         }
 
-        public async Task<PersonalInfo?> GetById(int id)
+        public async Task<PersonalInfo?> GetByIdAsync(int id)
         {
             PersonalInfo? result = await _db.PersonalInfos.FirstOrDefaultAsync(x => x.Id == id);
             return result;

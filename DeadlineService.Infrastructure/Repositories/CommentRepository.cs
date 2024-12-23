@@ -28,7 +28,7 @@ namespace DeadlineService.Infrastructure.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
-            Comment? comment = await GetById(id);
+            Comment? comment = await GetByIdAsync(id);
             if (comment == null)
             {
                 return false;
@@ -44,7 +44,7 @@ namespace DeadlineService.Infrastructure.Repositories
             return result;
         }
 
-        public async Task<Comment?> GetById(int id)
+        public async Task<Comment?>GetByIdAsync(int id)
         {
             Comment? result =await _db.Comments.FirstOrDefaultAsync(x => x.Id == id);
             return result;

@@ -8,6 +8,6 @@ namespace DeadlineService.Application.Interfaces.Base
 {
     public interface IGetByIdRepository<T> where T : class
     {
-        public Task<T?> GetById(int id);
+        public Task<T?> GetByIdAsync(int id);
     }
 }

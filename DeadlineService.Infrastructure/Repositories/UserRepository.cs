@@ -25,7 +25,7 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<bool> DeleteAsync(int id)
         {
-            User? obj= await GetById(id);
+            User? obj= await GetByIdAsync(id);
 
             if (obj == null) return false;
 
@@ -45,7 +45,7 @@ namespace DeadlineService.Infrastructure.Services
             var user =await _db.Users.FirstOrDefaultAsync(x=>x.Username==username);
             return user;
         }
-        public async Task<User?> GetByEmail(string email)
+        public async Task<User?> GetByEmailAsync(string email)
         {
             User? user = await _db.Users.
                 Include(x => x.PersonalInfo).
@@ -53,7 +53,7 @@ namespace DeadlineService.Infrastructure.Services
 
             return user;
         }
-        public async Task<User?> GetById(int id)
+        public async Task<User?> GetByIdAsync(int id)
         {
             User? user = await _db.Users.FirstOrDefaultAsync(x=>x.Id==id);
             return user;
