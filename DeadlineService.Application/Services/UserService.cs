@@ -1,15 +1,7 @@
 ﻿using DeadlineService.Application.Interfaces.Base;
 using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Application.Interfaces.Services;
-using DeadlineService.Domain.Models;
 using DeadlineService.Domain.Models.DTOs.User;
-using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using Microsoft.Extensions.Caching.Distributed;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Services
 {
@@ -32,8 +24,11 @@ namespace DeadlineService.Application.Services
         {
             User UsernameIsHave = await _userRepository.GetByUsernameAsync(registerUser.Username);
 
-            if (UsernameIsHave!=null)
-                return new("Пользователь с данным именем уже существует");
+            if (UsernameIsHave != null)
+                return new ResponseModel<UserGetDTO>("Пользователь с данным именем уже существует");
+
+            if (registerUser.ConfirmPassword!=registerUser.Password)
+                return new ResponseModel<UserGetDTO>("Пароль и подтверждение пароля должны совпадать между собой");
             
             User user = new User(registerUser.Username, _passwordHasher.StringToHash(registerUser.Password));
 
@@ -50,12 +45,12 @@ namespace DeadlineService.Application.Services
 
         public async Task<ResponseModel<UserGetDTO>> GetByEmailAsync(string email)
         {
-            if(string.IsNullOrEmpty(email)) return new("email is empty");
+            if (string.IsNullOrEmpty(email)) return new("email is empty");
 
-            User userWithEmail=await _userRepository.GetByEmailAsync(email);
+            User userWithEmail = await _userRepository.GetByEmailAsync(email);
 
-            if(userWithEmail == null)
-                return new("Пользователь с таким email не сушествует!"); 
+            if (userWithEmail == null)
+                return new("Пользователь с таким email не сушествует!");
 
             UserGetDTO userGetDTO = new UserGetDTO()
             {
@@ -70,37 +65,36 @@ namespace DeadlineService.Application.Services
         {
             User user = await _userRepository.GetByUsernameAsync(loginUser.Username);
 
-            if(user == null)
+            if (user == null)
                 return new("Пользователь с таким username не существует!");
-            
-                if(user.PasswordHash == _passwordHasher.StringToHash(loginUser.Password))
+
+            if (user.PasswordHash == _passwordHasher.StringToHash(loginUser.Password))
+            {
+                UserGetDTO userGetDTO = new UserGetDTO()
                 {
-                    UserGetDTO userGetDTO = new UserGetDTO()
-                    {
-                        PersonalInfoId = user.PersonalInfoId,
-                        Username = user.Username,
-                        Id = user.Id
-                    };
-                    return new(userGetDTO);
-                }
-                else
-                    return new("Неправильный пароль!");
+                    PersonalInfoId = user.PersonalInfoId,
+                    Username = user.Username,
+                    Id = user.Id
+                };
+                return new ResponseModel<UserGetDTO>(userGetDTO);
+            }
+            //Если пароль не совпал который в базе 
+                return new ResponseModel<UserGetDTO>("Неправильный пароль!");
         }
 
         public async Task<ResponseModel<UserGetDTO>> GetUserByIdAsync(int Id)
         {
             User? user = await _userRepository.GetByIdAsync(Id);
-            if(user == null)
-            {
-                return new("User с таким Id не найден!");
-            }
+            if (user == null)
+                return new ResponseModel<UserGetDTO>("User с таким Id не найден!");
+
             UserGetDTO userGetDTO = new()
             {
                 Id = user.Id,
                 PersonalInfoId = user.PersonalInfoId,
                 Username = user.Username
             };
-            return new(userGetDTO);
+            return new ResponseModel<UserGetDTO>(userGetDTO);
         }
     }
 }

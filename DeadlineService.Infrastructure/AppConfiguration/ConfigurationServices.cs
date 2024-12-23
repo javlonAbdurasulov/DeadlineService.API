@@ -32,6 +32,7 @@ namespace DeadlineService.Infrastructure.AppConfiguration
             services.AddScoped<IPersonalInfoRepository,PersonalInfoRepository>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRedisCacheService, RedisCacheService>();
+
             services.AddTransient<IPasswordHasher, PasswordHasherService>();
         }
     }

@@ -12,8 +12,6 @@ namespace DeadlineService.Infrastructure.Services
         {
             _db=db;
         }
-
-
         public async Task<User> CreateAsync(User obj)
         {
             obj.Roles = new List<Role> { new Role() { Id = 1 } };
@@ -22,7 +20,6 @@ namespace DeadlineService.Infrastructure.Services
             await _db.SaveChangesAsync();
             return obj;
         }
-
         public async Task<bool> DeleteAsync(int id)
         {
             User? obj= await GetByIdAsync(id);
@@ -33,13 +30,11 @@ namespace DeadlineService.Infrastructure.Services
             int result = await _db.SaveChangesAsync();
             return result > 0;
         }
-
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             var allUsers = await _db.Users.ToListAsync();
             return allUsers;
         }
-
         public async Task<User?> GetByUsernameAsync(string username)
         {
             var user =await _db.Users.FirstOrDefaultAsync(x=>x.Username==username);
@@ -58,7 +53,6 @@ namespace DeadlineService.Infrastructure.Services
             User? user = await _db.Users.FirstOrDefaultAsync(x=>x.Id==id);
             return user;
         }
-
         public async Task<User> UpdateAsync(User obj)
         {
             _db.Users.Update(obj);

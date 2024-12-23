@@ -1,11 +1,6 @@
 ﻿using DeadlineService.Application.Interfaces.Base;
 using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Application.Interfaces.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Services
 {
@@ -23,17 +18,18 @@ namespace DeadlineService.Application.Services
         public async Task<ResponseModel<PersonalInfoGetDTO>> CreatePersonalInfoAsync(PersonalInfoCreateDTO personalInfoDTO)
         {
             var userGetById = await _userService.GetUserByIdAsync(personalInfoDTO.UserId);
-            if(userGetById.Result == null)
+            if (userGetById.Result == null)
             {
                 return new(userGetById.Error);
-            }else if (userGetById.Result.PersonalInfoId!=null)
+            }
+            else if (userGetById.Result.PersonalInfoId != null)
             {
                 return new("User уже имеет PersonalInfo, невозможно создать!");
             }
             PersonalInfo personalInfo = new(personalInfoDTO.Email,
                 personalInfoDTO.PhoneNumber, personalInfoDTO.UserId,
                 personalInfoDTO.Description, personalInfoDTO.Photo);
-            
+
             personalInfo = await _personalInfoRepository.CreateAsync(personalInfo);
 
             PersonalInfoGetDTO personalInfoGetDTO = new PersonalInfoGetDTO()
@@ -52,7 +48,7 @@ namespace DeadlineService.Application.Services
         public async Task<ResponseModel<PersonalInfoGetDTO>> GetPersonalInfoByIdAsync(int Id)
         {
             PersonalInfo? personalInfo = await _personalInfoRepository.GetByIdAsync(Id);
-            if(personalInfo == null)
+            if (personalInfo == null)
             {
                 return new("PersonalInfo с таким Id не найден!");
             }
@@ -69,22 +65,23 @@ namespace DeadlineService.Application.Services
             return new(personalInfoGetDTO);
         }
 
-        public async Task<ResponseModel<PersonalInfoGetDTO>> SetOrUpdateDescriptionAsync(int personalInfoId,string description)
+        public async Task<ResponseModel<PersonalInfoGetDTO>> SetOrUpdateDescriptionAsync(int personalInfoId, string description)
         {
             var personalInfo = await GetPersonalInfoByIdAsync(personalInfoId);
-            if(personalInfo.Result == null)
+            if (personalInfo.Result == null)
             {
                 return new(personalInfo.Error);
             }
-            PersonalInfoUpdateDTO personalInfoForUpdate = new(){
+            PersonalInfoUpdateDTO personalInfoForUpdate = new()
+            {
                 Id = personalInfo.Result.Id,
                 Email = personalInfo.Result.Email,
                 PhoneNumber = personalInfo.Result.PhoneNumber,
-                Description = description, 
+                Description = description,
                 Photo = personalInfo.Result.Photo
             };
             var personalInfoUpdated = await UpdatePersonalInfoAsync(personalInfoForUpdate);
-            if(personalInfoUpdated.Result == null)
+            if (personalInfoUpdated.Result == null)
             {
                 return new(personalInfoUpdated.Error);
             }
@@ -117,7 +114,7 @@ namespace DeadlineService.Application.Services
         public async Task<ResponseModel<PersonalInfoGetDTO>> UpdatePersonalInfoAsync(PersonalInfoUpdateDTO personalInfoDTO)
         {
             var personalInfoGetById = await GetPersonalInfoByIdAsync(personalInfoDTO.Id);
-            if(personalInfoGetById.Result == null)
+            if (personalInfoGetById.Result == null)
             {
                 return new(personalInfoGetById.Error);
             }
