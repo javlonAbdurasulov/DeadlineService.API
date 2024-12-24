@@ -1,16 +1,11 @@
 ﻿using DeadlineService.Domain.Models.Pagination;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Services
 {
-    public class PaginationService<T>
+    public  class PaginationService<T>
     {
-        public async Task<PaginatedResponse<T>> GetPaginatedAsyncData(IQueryable<T> items,PaginationParametrs paginationParametrs)
+        public  async Task<PaginatedResponse<T>> GetPaginatedAsyncData(IQueryable<T> items, PaginationParametrs paginationParametrs)
         {
 
             int totalItems = await items.CountAsync();
