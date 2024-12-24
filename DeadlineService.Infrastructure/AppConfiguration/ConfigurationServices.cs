@@ -18,7 +18,7 @@ namespace DeadlineService.Infrastructure.AppConfiguration
 {
     public static class ConfigurationServices
     {
-        public static void AddApplicationServices(this IServiceCollection services,IConfiguration configuration)
+        public static void AddConfigurationServices(this IServiceCollection services,IConfiguration configuration)
         {
             services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Javlon")));
             services.AddStackExchangeRedisCache(options =>
