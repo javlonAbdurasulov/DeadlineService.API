@@ -1,9 +1,6 @@
 ﻿using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Application.Interfaces.Services;
-using DeadlineService.Domain.Models;
 using DeadlineService.Domain.Models.DTOs.Comment;
-using DeadlineService.Domain.Models.Enum;
-using System.Net;
 
 namespace DeadlineService.Application.Services
 {
@@ -63,7 +60,7 @@ namespace DeadlineService.Application.Services
                 OrderId = order.Id,
                 Stars = postCommentDTO.Stars
             };
-           var returnedComment = await _commentRepository.CreateAsync(newComment);
+            var returnedComment = await _commentRepository.CreateAsync(newComment);
 
             return new(returnedComment);
 
