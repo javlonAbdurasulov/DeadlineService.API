@@ -2,7 +2,7 @@
 using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Domain.Models.DTOs.Comment;
 
-namespace DeadlineService.Application.Services
+namespace DeadlineService.Application.Services.Model
 {
 
     public class CommentService : ICommentService

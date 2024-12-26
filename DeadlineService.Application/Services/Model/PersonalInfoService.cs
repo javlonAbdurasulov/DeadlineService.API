@@ -2,7 +2,7 @@
 using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Application.Interfaces.Services;
 
-namespace DeadlineService.Application.Services
+namespace DeadlineService.Application.Services.Model
 {
     public class PersonalInfoService : IPersonalInfoService
     {

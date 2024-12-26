@@ -11,7 +11,7 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeadlineService.Application.Services
+namespace DeadlineService.Application.Services.Security
 {
     public class AuthorizationService : IAuthorizationService
     {
@@ -22,7 +22,7 @@ namespace DeadlineService.Application.Services
         }
         public JwtToken GenerateJwtToken(string UserName)
         {
-            
+
             var tokenHandler = new JwtSecurityTokenHandler();
             //var tokenKey = "Aa12@#aA";
             var tokenKey = Encoding.UTF8.GetBytes(_configuration.GetSection("Authorization")["SecretKey"] ?? "Aa12@#aA");
@@ -30,7 +30,7 @@ namespace DeadlineService.Application.Services
             var tokenAudience = _configuration.GetSection("Authorization")["Audience"];
             var tokenExpiretTime = Convert.ToInt32(_configuration.GetSection("Authorization")["ExpiretTime"]);
 
-            var claims = new List<Claim> { new Claim(ClaimTypes.Role, UserName) , new Claim(ClaimTypes.Name, UserName) };
+            var claims = new List<Claim> { new Claim(ClaimTypes.Role, UserName), new Claim(ClaimTypes.Name, UserName) };
             var jwt = new JwtSecurityToken(
                     issuer: tokenIssuer,
                     audience: tokenAudience,
@@ -41,7 +41,7 @@ namespace DeadlineService.Application.Services
             var refreshToken = RefreshToken(UserName);
 
             return new JwtToken { AccessToken = tokenHandler.WriteToken(jwt), RefreshToken = refreshToken };
-            
+
         }
         public string RefreshToken(string UserName)
         {

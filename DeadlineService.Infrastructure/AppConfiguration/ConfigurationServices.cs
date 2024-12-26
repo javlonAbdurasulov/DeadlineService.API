@@ -2,6 +2,7 @@
 using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Application.Services;
+using DeadlineService.Application.Services.Model;
 using DeadlineService.Infrastructure.Data;
 using DeadlineService.Infrastructure.Repositories;
 using DeadlineService.Infrastructure.Services;

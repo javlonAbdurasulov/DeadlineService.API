@@ -2,9 +2,9 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace DeadlineService.Application.Services
+namespace DeadlineService.Application.Services.Security
 {
-    public class PasswordHasherService : IPasswordHasher
+    public class PasswordHasher : IPasswordHasher
     {
         public bool VerifyPassword(string hashedPassword, string verifyPassword)
         {
