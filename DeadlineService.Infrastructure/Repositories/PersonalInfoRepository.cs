@@ -2,11 +2,6 @@
 using DeadlineService.Domain.Models.Entity;
 using DeadlineService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DeadlineService.Infrastructure.Services
 {
@@ -29,10 +24,6 @@ namespace DeadlineService.Infrastructure.Services
         public async Task<bool> DeleteAsync(int id)
         {
             PersonalInfo? personalInfo = await GetByIdAsync(id);
-            if (personalInfo == null)
-            {
-                return false;
-            }
             _db.PersonalInfos.Remove(personalInfo);
             var result = await _db.SaveChangesAsync();
             return result > 0;
