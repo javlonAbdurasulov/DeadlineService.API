@@ -1,3 +1,4 @@
+using DeadlineService.Application.ApplicationService;
 using DeadlineService.Infrastructure.AppConfiguration;
 namespace DeadlineService.API
 {
@@ -13,7 +14,14 @@ namespace DeadlineService.API
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
+
+            // Регистрация конфигурации (это уже включено в шаблоне)
+            builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
+            builder.Configuration.AddEnvironmentVariables();
+
+            builder.Services.AddConfigurationServices(builder.Configuration);
             builder.Services.AddApplicationServices(builder.Configuration);
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -25,6 +33,8 @@ namespace DeadlineService.API
 
             app.UseHttpsRedirection();
 
+
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllers();
