@@ -3,29 +3,27 @@ using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Domain.Models;
 using DeadlineService.Domain.Models.DTOs.User;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Caching.StackExchangeRedis;
 using System.Net;
 using System.Text;
 using System.Text.Json;
-using System.Text.Unicode;
 
 namespace DeadlineService.API.Controllers
 {
     [ApiController]
     [Route("[controller]/[action]")]
-    public class UserController:ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
         private readonly IRedisCacheService _redisCache;
         public UserController(IUserService userService,
             IRedisCacheService redisCache)
         {
-            _redisCache=redisCache;
-            _userService =userService;
+            _redisCache = redisCache;
+            _userService = userService;
         }
         [HttpGet]
         public async Task<ResponseModel<UserGetDTO>> UserById(int id)
-        {       
+        {
             string cacheKey = $"User:{id}";
 
             var cachedUserData = await _redisCache.GetAsync(cacheKey);
@@ -38,9 +36,9 @@ namespace DeadlineService.API.Controllers
             }
 
             var userResponse = await _userService.GetUserByIdAsync(id);
-            if (userResponse != null )
+            if (userResponse != null)
             {
-                var userDataToCache=JsonSerializer.Serialize(userResponse);
+                var userDataToCache = JsonSerializer.Serialize(userResponse);
                 await _redisCache.SetAsync(cacheKey, UTF8Encoding.UTF8.GetBytes(userDataToCache));
             }
             return userResponse;
@@ -67,6 +65,18 @@ namespace DeadlineService.API.Controllers
             }
             return userResponse;
         }
+        [HttpGet]
+        public async Task<ResponseModel<IEnumerable<UserGetDTO>>> GetAllUsers()
+        {
+            var allUsers = await _userService.GetAllUsers();
+            return new ResponseModel<IEnumerable<UserGetDTO>>();
+        }
+        [HttpPatch]
+        public async Task<ResponseModel<IEnumerable<UserGetDTO>>> UpdateUser(string username,string email)
+        {
+            var allUsers = await _userService.GetAllUsers();
+            return new ResponseModel<IEnumerable<UserGetDTO>>();
+        }
         [HttpPost]
         public async Task<ResponseModel<UserGetDTO>> Registration(RegisterUser registerUser)
         {
@@ -83,8 +93,18 @@ namespace DeadlineService.API.Controllers
             return await _userService.RegistrationAsync(registerUser);
         }
         [HttpPost]
-        public async Task<ResponseModel<UserGetDTO>> Login(LoginUser loginUser) {
+        public async Task<ResponseModel<UserGetDTO>> Login(LoginUser loginUser)
+        {
             return await _userService.LoginAsync(loginUser);
+        }
+
+        [HttpPost]
+        public async Task<ResponseModel<string>> ConfirmEmail(string userEmail)
+        {
+            var token = Guid.NewGuid().ToString();
+            var confirmationLink = $"http://localhost/confirm?email={userEmail}&token={token}";
+            await _userService.SendConfirmationEmail(userEmail, confirmationLink);
+            return new ResponseModel<string>("Operation is successfuly finally");
         }
     }
 }

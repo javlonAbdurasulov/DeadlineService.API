@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeadlineService.Infrastructure.Migrations
 {
     [DbContext(typeof(DSDbContext))]
-    [Migration("20241222162415_initdb")]
-    partial class initdb
+    [Migration("20241227172222_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -49,6 +49,30 @@ namespace DeadlineService.Infrastructure.Migrations
                         .IsUnique();
 
                     b.ToTable("Comments");
+                });
+
+            modelBuilder.Entity("DeadlineService.Domain.Models.Entity.EmailConfirmation", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Email")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.Property<DateTime>("Expiration")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("Token")
+                        .IsRequired()
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EmailConfirmations");
                 });
 
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.Order", b =>
@@ -116,11 +140,9 @@ namespace DeadlineService.Infrastructure.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Email")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.Property<byte[]>("Photo")
@@ -128,6 +150,9 @@ namespace DeadlineService.Infrastructure.Migrations
 
                     b.Property<int>("UserId")
                         .HasColumnType("integer");
+
+                    b.Property<bool>("isEmailConfirmed")
+                        .HasColumnType("boolean");
 
                     b.HasKey("Id");
 
@@ -146,7 +171,6 @@ namespace DeadlineService.Infrastructure.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Name")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");

@@ -3,6 +3,7 @@ using DeadlineService.Application.Interfaces.Repostitories;
 using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Application.Services;
 using DeadlineService.Application.Services.Model;
+using DeadlineService.Application.Services.Security;
 using DeadlineService.Infrastructure.Data;
 using DeadlineService.Infrastructure.Repositories;
 using DeadlineService.Infrastructure.Services;
@@ -21,7 +22,7 @@ namespace DeadlineService.Infrastructure.AppConfiguration
     {
         public static void AddConfigurationServices(this IServiceCollection services,IConfiguration configuration)
         {
-            services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Javlon")));
+            services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Shokir")));
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = "localhost:6379";
@@ -34,7 +35,7 @@ namespace DeadlineService.Infrastructure.AppConfiguration
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRedisCacheService, RedisCacheService>();
 
-            services.AddTransient<IPasswordHasher, PasswordHasherService>();
+            services.AddTransient<IPasswordHasher, PasswordHasher>();
         }
     }
 }

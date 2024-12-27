@@ -45,5 +45,6 @@ namespace DeadlineService.Infrastructure.Data
         public DbSet<Order> Orders { get; set; }
         public DbSet<Comment> Comments { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<EmailConfirmation> EmailConfirmations { get; set; }
     }
 }

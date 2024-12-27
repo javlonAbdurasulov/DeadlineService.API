@@ -1,5 +1,7 @@
 using DeadlineService.Application.ApplicationService;
 using DeadlineService.Infrastructure.AppConfiguration;
+using DeadlineService.Infrastructure.Data;
+using Microsoft.EntityFrameworkCore;
 namespace DeadlineService.API
 {
     public class Program
@@ -32,7 +34,24 @@ namespace DeadlineService.API
             }
 
             app.UseHttpsRedirection();
+            app.MapGet("/confirm", async (string email, string token, DSDbContext dbContext) =>
+            {
+                // Обработка подтверждения
+                var confirmation = await dbContext.EmailConfirmations
+                    .FirstOrDefaultAsync(c => c.Email == email && c.Token == token);
 
+                if (confirmation == null || confirmation.Expiration < DateTime.UtcNow)
+                    return Results.BadRequest("Invalid or expired confirmation link.");
+
+                var user = await dbContext.Users.Select(x=>x.PersonalInfo).FirstOrDefaultAsync(x=>x.Email==email);
+                if (user == null) return Results.BadRequest("User not found.");
+
+                user.isEmailConfirmed = true;
+                dbContext.EmailConfirmations.Remove(confirmation);
+                await dbContext.SaveChangesAsync();
+
+                return Results.Ok("Email confirmed successfully!");
+            });
 
             app.UseAuthentication();
             app.UseAuthorization();

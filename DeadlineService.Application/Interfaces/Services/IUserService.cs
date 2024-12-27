@@ -14,6 +14,9 @@ namespace DeadlineService.Application.Interfaces.Services
         public Task<ResponseModel<UserGetDTO>> RegistrationAsync(RegisterUser registerUser);
         public Task<ResponseModel<UserGetDTO>> LoginAsync(LoginUser loginUser);
         public Task<ResponseModel<UserGetDTO>> GetUserByIdAsync(int Id);
+        public  Task<ResponseModel<IEnumerable<User>>> GetAllUsers();
+        public  Task<ResponseModel<User>> UpdateUser(string username,string email);
+        public Task SendConfirmationEmail(string userMail, string confirmationLink);
 
     }
 }

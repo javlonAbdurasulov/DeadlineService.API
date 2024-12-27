@@ -14,7 +14,5 @@ namespace DeadlineService.API.Controllers
         {
             _emailSender = mailgun;
         }
-
-        public async Task<ResponseModel<>>
     }
 }

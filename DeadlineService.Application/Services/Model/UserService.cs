@@ -101,7 +101,6 @@ namespace DeadlineService.Application.Services.Model
             };
             return new ResponseModel<UserGetDTO>(userGetDTO);
         }
-
         public async Task SendConfirmationEmail(string userMail,string confirmationLink)
         { 
             var subject = "confirm your email";
@@ -114,6 +113,24 @@ namespace DeadlineService.Application.Services.Model
             var subject = "reset your password";
             var body = $"<p>Click the link to confirm your email:<a href-'{resetLink}'> Reset Password</a></p>";
           //  await _mailGunService.ResetPasswordEmailAsync(usermail, subject, body);
+        }
+
+        public async Task<ResponseModel<IEnumerable<User>>> GetAllUsers()
+        {
+            IEnumerable<User> allUsers = await _userRepository.GetAllAsync();
+
+            return new ResponseModel<IEnumerable<User>>(allUsers);
+        }
+
+        public async Task<ResponseModel<User>> UpdateUser(string username, string email)
+        {
+            var userNew = await _userRepository.GetByUsernameAsync(username);
+            if (username == null) return new ResponseModel<User>("Пользователь с таким аддресом электронной почты не нашлось.");
+
+            userNew.PersonalInfo.Email = email;
+            userNew.PersonalInfo.isEmailConfirmed = false;
+            await _userRepository.UpdateAsync(userNew);
+            return new ResponseModel<User>(userNew);
         }
     }
 }

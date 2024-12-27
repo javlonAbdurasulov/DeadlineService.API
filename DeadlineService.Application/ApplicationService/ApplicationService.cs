@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using MyApp.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,6 +16,14 @@ namespace DeadlineService.Application.ApplicationService
     {
         public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            services.AddHttpClient("MailGunClient", client =>
+            {
+                client.BaseAddress = new Uri("https://api.mailgun.net/v3");
+                client.DefaultRequestHeaders.Add("Accept", "application/json");
+            });
+
+            services.AddSingleton<MailgunService>();
+
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

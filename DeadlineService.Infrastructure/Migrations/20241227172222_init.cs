@@ -7,18 +7,33 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeadlineService.Infrastructure.Migrations
 {
     /// <inheritdoc />
-    public partial class initdb : Migration
+    public partial class init : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.CreateTable(
+                name: "EmailConfirmations",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Email = table.Column<string>(type: "text", nullable: false),
+                    Token = table.Column<string>(type: "text", nullable: false),
+                    Expiration = table.Column<DateTime>(type: "timestamp with time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_EmailConfirmations", x => x.Id);
+                });
+
             migrationBuilder.CreateTable(
                 name: "Roles",
                 columns: table => new
                 {
                     Id = table.Column<int>(type: "integer", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    Name = table.Column<string>(type: "text", nullable: false)
+                    Name = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -82,8 +97,9 @@ namespace DeadlineService.Infrastructure.Migrations
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Description = table.Column<string>(type: "text", nullable: true),
                     Photo = table.Column<byte[]>(type: "bytea", nullable: true),
-                    Email = table.Column<string>(type: "text", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    isEmailConfirmed = table.Column<bool>(type: "boolean", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
                     CreateAt = table.Column<DateTime>(type: "timestamp with time zone", nullable: false),
                     UserId = table.Column<int>(type: "integer", nullable: false)
                 },
@@ -176,6 +192,9 @@ namespace DeadlineService.Infrastructure.Migrations
         {
             migrationBuilder.DropTable(
                 name: "Comments");
+
+            migrationBuilder.DropTable(
+                name: "EmailConfirmations");
 
             migrationBuilder.DropTable(
                 name: "PersonalInfos");
