@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeadlineService.Domain.Models.Enum
+namespace DeadlineService.Domain.Enum
 {
-    public enum OrderStatus:byte
+    public enum OrderStatus : byte
     {
         Free,
         Busy,

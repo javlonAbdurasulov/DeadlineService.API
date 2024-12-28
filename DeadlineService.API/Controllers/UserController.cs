@@ -89,7 +89,7 @@ namespace DeadlineService.API.Controllers
         {
             if (registerUser.ConfirmPassword != registerUser.Password)
             {
-                return new ResponseModel<User>("")
+                return new ResponseModel<User>()
                 {
                     StatusCode = HttpStatusCode.BadRequest,
                     Error = "Password and Confirm Password do not match.",
@@ -103,15 +103,6 @@ namespace DeadlineService.API.Controllers
         public async Task<ResponseModel<UserGetDTO>> Login(LoginUser loginUser)
         {
             return await _userService.LoginAsync(loginUser);
-        }
-
-        [HttpPost]
-        public async Task<ResponseModel<string>> ConfirmEmail(string userEmail)
-        {
-            var token = Guid.NewGuid().ToString();
-            var confirmationLink = $"http://localhost/confirm?email={userEmail}&token={token}";
-            await _userService.SendConfirmationEmail(userEmail, confirmationLink);
-            return new ResponseModel<string>("Operation is successfuly finally");
         }
     }
 }

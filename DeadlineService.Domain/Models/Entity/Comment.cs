@@ -1,4 +1,4 @@
-﻿using DeadlineService.Domain.Models.Enum;
+﻿using DeadlineService.Domain.Enum;
 using System;
 using System.Collections.Generic;
 using System.Linq;

@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeadlineService.Domain.Models.Enum
+namespace DeadlineService.Domain.Enum
 {
     public enum Stars
     {
-     one,
-     two,
-     three,
-     four,
-     five,
+        one,
+        two,
+        three,
+        four,
+        five,
     }
 }
