@@ -12,10 +12,9 @@ namespace DeadlineService.Domain.Models
         public ResponseModel()
         {
         }
-
         public ResponseModel(T result, HttpStatusCode statusCode = HttpStatusCode.OK)
         {
-            Result = result;
+            Result=result;
             StatusCode = statusCode;
         }
 
@@ -26,6 +25,6 @@ namespace DeadlineService.Domain.Models
         }
         public HttpStatusCode StatusCode { get; set; } = HttpStatusCode.OK;
         public string? Error { get; set; }
-        public T? Result { get; set; }
+        public T Result { get; set; }
     }
 }

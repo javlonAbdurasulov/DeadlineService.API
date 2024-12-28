@@ -34,7 +34,6 @@ namespace DeadlineService.Application.Services.Model
 
             PersonalInfoGetDTO personalInfoGetDTO = new PersonalInfoGetDTO()
             {
-                CreateAt = personalInfo.CreateAt,
                 Email = personalInfo.Email,
                 PhoneNumber = personalInfo.PhoneNumber,
                 UserId = personalInfo.UserId,
@@ -116,7 +115,7 @@ namespace DeadlineService.Application.Services.Model
             var personalInfoGetById = await GetPersonalInfoByIdAsync(personalInfoDTO.Id);
             if (personalInfoGetById.Result == null)
             {
-                return new(personalInfoGetById.Error);
+                return new ResponseModel<PersonalInfoGetDTO>(personalInfoGetById.Error);
             }
             PersonalInfo personalInfo = new()
             {
@@ -139,7 +138,7 @@ namespace DeadlineService.Application.Services.Model
                 Description = personalInfo.Description,
                 Photo = personalInfo.Photo
             };
-            return new(personalInfoGetDTO);
+            return new ResponseModel<PersonalInfoGetDTO>(personalInfoGetDTO);
         }
     }
 }

@@ -13,38 +13,37 @@ namespace DeadlineService.Application.Services.Model
         private readonly IPasswordHasher _passwordHasher;
         private readonly IRedisCacheService _cache;
         private readonly MailgunService _mailGunService;
+        private readonly IPersonalInfoService _personalInfoService;
         public UserService(
             IUserRepository userRepository,
             IPasswordHasher passwordHasher,
             IRedisCacheService appCache,
-            MailgunService mailgunService)
+            MailgunService mailgunService,
+            IPersonalInfoService personalInfoService)
         {
             _mailGunService = mailgunService;
             _passwordHasher = passwordHasher;
             _userRepository = userRepository;
             _cache = appCache;
+            _personalInfoService=personalInfoService;
         }
 
-        public async Task<ResponseModel<UserGetDTO>> RegistrationAsync(RegisterUser registerUser)
+        public async Task<ResponseModel<User>> RegistrationAsync(RegisterUser registerUser)
         {
             User UsernameIsHave = await _userRepository.GetByUsernameAsync(registerUser.Username);
 
             if (UsernameIsHave != null)
-                return new ResponseModel<UserGetDTO>("Пользователь с данным именем уже существует");
+                return new ResponseModel<User>("Пользователь с данным именем уже существует");
 
             if (registerUser.ConfirmPassword != registerUser.Password)
-                return new ResponseModel<UserGetDTO>("Пароль и подтверждение пароля должны совпадать между собой");
+                return new ResponseModel<User>("Пароль и подтверждение пароля должны совпадать между собой");
 
             User user = new User(registerUser.Username, _passwordHasher.StringToHash(registerUser.Password));
 
             user = await _userRepository.CreateAsync(user);
 
-            UserGetDTO userGetDTO = new UserGetDTO()
-            {
-                Id = user.Id,
-                Username = user.Username
-            };
-            return new(userGetDTO);
+
+            return new(user);
         }
 
         public async Task<ResponseModel<UserGetDTO>> GetByEmailAsync(string email)
@@ -117,14 +116,15 @@ namespace DeadlineService.Application.Services.Model
 
             return new ResponseModel<IEnumerable<User>>(allUsers);
         }
-
-        public async Task<ResponseModel<User>> UpdateUser(string username, string email)
+        public async Task<ResponseModel<IEnumerable<User>>> GetAllWithAllInformationAsync()
+        {
+            var allUsers = await _userRepository.GetAllWithAllInformationAsync();
+            return new ResponseModel<IEnumerable<User>>(allUsers);
+        }
+        public async Task<ResponseModel<User>> UpdateUser(string username, PersonalInfoCreateDTO obj)
         {
             var userNew = await _userRepository.GetByUsernameAsync(username);
             if (username == null) return new ResponseModel<User>("Пользователь с таким аддресом электронной почты не нашлось.");
-
-            userNew.PersonalInfo.Email = email;
-            userNew.PersonalInfo.isEmailConfirmed = false;
             await _userRepository.UpdateAsync(userNew);
             return new ResponseModel<User>(userNew);
         }

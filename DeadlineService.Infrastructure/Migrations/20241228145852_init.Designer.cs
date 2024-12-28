@@ -12,8 +12,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DeadlineService.Infrastructure.Migrations
 {
     [DbContext(typeof(DSDbContext))]
-    [Migration("20241228083715_initdb")]
-    partial class initdb
+    [Migration("20241228145852_init")]
+    partial class init
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -133,8 +133,9 @@ namespace DeadlineService.Infrastructure.Migrations
 
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
-                    b.Property<DateTime>("CreateAt")
-                        .HasColumnType("timestamp with time zone");
+                    b.Property<string>("CreateAt")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -246,11 +247,11 @@ namespace DeadlineService.Infrastructure.Migrations
 
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.User", b =>
                 {
-                    b.HasOne("DeadlineService.Domain.Models.Entity.Role", "Roles")
+                    b.HasOne("DeadlineService.Domain.Models.Entity.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId");
 
-                    b.Navigation("Roles");
+                    b.Navigation("Role");
                 });
 
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.Order", b =>
