@@ -13,10 +13,10 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Services.Security
 {
-    public class AuthorizationService : IAuthorizationService
+    public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
-        public AuthorizationService(IConfiguration configuration)
+        public TokenService(IConfiguration configuration)
         {
             _configuration = configuration;
         }

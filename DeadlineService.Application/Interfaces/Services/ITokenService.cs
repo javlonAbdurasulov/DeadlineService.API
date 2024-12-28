@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace DeadlineService.Application.Interfaces.Services
 {
-    public interface IAuthorizationService
+    public interface ITokenService
     {
         JwtToken GenerateJwtToken(string UserName);
         string RefreshToken(string UserName);
