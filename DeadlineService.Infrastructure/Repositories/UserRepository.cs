@@ -1,4 +1,5 @@
 ﻿using DeadlineService.Application.Interfaces.Repostitories;
+using DeadlineService.Domain.Models;
 using DeadlineService.Domain.Models.Entity;
 using DeadlineService.Infrastructure.Data;
 using Microsoft.EntityFrameworkCore;
@@ -33,6 +34,15 @@ namespace DeadlineService.Infrastructure.Services
         public async Task<IEnumerable<User>> GetAllAsync()
         {
             var allUsers = await _db.Users.ToListAsync();
+            return allUsers;
+        }
+        public async Task<IEnumerable<User>> GetAllWithAllInformationAsync()
+        {
+            var allUsers = await _db.Users.Include(x => x.PersonalInfo).
+                Include(x => x.Role).
+                Include(x => x.AssignedOrders).
+                Include(x => x.CreatedOrders).
+                ToListAsync();
             return allUsers;
         }
         public async Task<User?> GetByUsernameAsync(string username)

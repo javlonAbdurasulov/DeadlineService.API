@@ -22,7 +22,7 @@ namespace DeadlineService.Infrastructure.AppConfiguration
     {
         public static void AddConfigurationServices(this IServiceCollection services,IConfiguration configuration)
         {
-            services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Javlon")));
+            services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Shokir")));
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = "localhost:6379";
@@ -36,6 +36,8 @@ namespace DeadlineService.Infrastructure.AppConfiguration
             services.AddScoped<IRedisCacheService, RedisCacheService>();
 
             services.AddTransient<IPasswordHasher, PasswordHasher>();
+
+            services.AddScoped<IRoleRepository, RoleRepository>();
         }
     }
 }

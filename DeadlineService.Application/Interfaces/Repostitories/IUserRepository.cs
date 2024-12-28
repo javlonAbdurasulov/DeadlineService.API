@@ -11,5 +11,6 @@ namespace DeadlineService.Application.Interfaces.Repostitories
     {
         public Task<User> GetByEmailAsync(string email);
         public Task<User> GetByUsernameAsync(string username);
+        public Task<IEnumerable<User>> GetAllWithAllInformationAsync();
     }
 }

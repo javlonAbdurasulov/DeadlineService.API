@@ -2,6 +2,7 @@
 using DeadlineService.Application.Interfaces.Services;
 using DeadlineService.Domain.Models;
 using DeadlineService.Domain.Models.DTOs.User;
+using DeadlineService.Domain.Models.Entity;
 using Microsoft.AspNetCore.Mvc;
 using System.Net;
 using System.Text;
@@ -66,10 +67,16 @@ namespace DeadlineService.API.Controllers
             return userResponse;
         }
         [HttpGet]
-        public async Task<ResponseModel<IEnumerable<UserGetDTO>>> GetAllUsers()
+        public async Task<ResponseModel<IEnumerable<User>>> GetAllUsers()
         {
             var allUsers = await _userService.GetAllUsers();
-            return new ResponseModel<IEnumerable<UserGetDTO>>();
+            return allUsers;
+        }
+        [HttpGet]
+        public async Task<ResponseModel<IEnumerable<User>>> GetAllWithAllInformationAsync()
+        {
+            var allUsers = await _userService.GetAllWithAllInformationAsync();
+            return allUsers;
         }
         [HttpPatch]
         public async Task<ResponseModel<IEnumerable<UserGetDTO>>> UpdateUser(string username,string email)
@@ -78,11 +85,11 @@ namespace DeadlineService.API.Controllers
             return new ResponseModel<IEnumerable<UserGetDTO>>();
         }
         [HttpPost]
-        public async Task<ResponseModel<UserGetDTO>> Registration(RegisterUser registerUser)
+        public async Task<ResponseModel<User>> Registration(RegisterUser registerUser)
         {
             if (registerUser.ConfirmPassword != registerUser.Password)
             {
-                return new ResponseModel<UserGetDTO>()
+                return new ResponseModel<User>("")
                 {
                     StatusCode = HttpStatusCode.BadRequest,
                     Error = "Password and Confirm Password do not match.",

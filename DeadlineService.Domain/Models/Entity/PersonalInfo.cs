@@ -12,8 +12,7 @@ namespace DeadlineService.Domain.Models.Entity
         public PersonalInfo() { }
         public PersonalInfo(string email,string phoneNumber,int userId,string? description, byte[]? photo)
         {
-            CreateAt = DateTime.Now;
-
+            CreateAt = DateTime.Now.ToLongDateString() ;
             Email = email;
             PhoneNumber = phoneNumber;
             Description = description;
@@ -28,7 +27,7 @@ namespace DeadlineService.Domain.Models.Entity
         public string? Email { get; set; }
         public bool isEmailConfirmed { get; set; } = false;
         public string? PhoneNumber { get; set; }
-        public DateTime CreateAt { get; set; }
+        public string CreateAt { get; set; }=DateTime.Now.ToString();
 
         public int UserId{ get; set; }
         public User User{ get; set; }

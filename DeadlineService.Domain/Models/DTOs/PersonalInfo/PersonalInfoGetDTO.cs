@@ -13,7 +13,7 @@ namespace DeadlineService.Domain.Models.DTOs.PersonalInfo
         public byte[]? Photo { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime CreateAt { get; set; }
+        public string CreateAt { get; set; }
 
         public int UserId { get; set; }
     }
