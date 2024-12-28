@@ -42,7 +42,6 @@ namespace DeadlineService.Application.Services.Model
             UserGetDTO userGetDTO = new UserGetDTO()
             {
                 Id = user.Id,
-                PersonalInfoId = user.PersonalInfoId,
                 Username = user.Username
             };
             return new(userGetDTO);
@@ -59,7 +58,6 @@ namespace DeadlineService.Application.Services.Model
 
             UserGetDTO userGetDTO = new UserGetDTO()
             {
-                PersonalInfoId = userWithEmail.PersonalInfoId,
                 Username = userWithEmail.Username,
                 Id = userWithEmail.Id
             };
@@ -77,7 +75,6 @@ namespace DeadlineService.Application.Services.Model
             {
                 UserGetDTO userGetDTO = new UserGetDTO()
                 {
-                    PersonalInfoId = user.PersonalInfoId,
                     Username = user.Username,
                     Id = user.Id
                 };
@@ -96,7 +93,6 @@ namespace DeadlineService.Application.Services.Model
             UserGetDTO userGetDTO = new()
             {
                 Id = user.Id,
-                PersonalInfoId = user.PersonalInfoId,
                 Username = user.Username
             };
             return new ResponseModel<UserGetDTO>(userGetDTO);

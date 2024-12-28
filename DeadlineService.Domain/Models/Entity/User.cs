@@ -12,12 +12,11 @@
         public string Username { get; set; }
         public string PasswordHash { get; set; }
 
-        public int PersonalInfoId { get; set; }
         public PersonalInfo? PersonalInfo { get; set; }
 
-        public ICollection<Role>? Roles { get; set; }
+        public int? RoleId { get; set; }
+        public Role? Roles { get; set; }
         public ICollection<Order>? CreatedOrders { get; set; }
         public ICollection<Order>? AssignedOrders { get; set; }
-
     }
 }

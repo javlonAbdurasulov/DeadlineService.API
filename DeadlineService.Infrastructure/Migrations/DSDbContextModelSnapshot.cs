@@ -187,7 +187,7 @@ namespace DeadlineService.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("text");
 
-                    b.Property<int>("PersonalInfoId")
+                    b.Property<int?>("RoleId")
                         .HasColumnType("integer");
 
                     b.Property<string>("Username")
@@ -196,22 +196,9 @@ namespace DeadlineService.Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("RoleId");
+
                     b.ToTable("Users");
-                });
-
-            modelBuilder.Entity("RoleUser", b =>
-                {
-                    b.Property<int>("RolesId")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("UsersId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("RolesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("RoleUser");
                 });
 
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.Comment", b =>
@@ -254,24 +241,23 @@ namespace DeadlineService.Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("DeadlineService.Domain.Models.Entity.User", b =>
                 {
-                    b.HasOne("DeadlineService.Domain.Models.Entity.Role", null)
-                        .WithMany()
-                        .HasForeignKey("RolesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.HasOne("DeadlineService.Domain.Models.Entity.Role", "Roles")
+                        .WithMany("Users")
+                        .HasForeignKey("RoleId");
 
-                    b.HasOne("DeadlineService.Domain.Models.Entity.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.Navigation("Roles");
                 });
 
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.Order", b =>
                 {
                     b.Navigation("Comment");
+                });
+
+            modelBuilder.Entity("DeadlineService.Domain.Models.Entity.Role", b =>
+                {
+                    b.Navigation("Users");
                 });
 
             modelBuilder.Entity("DeadlineService.Domain.Models.Entity.User", b =>

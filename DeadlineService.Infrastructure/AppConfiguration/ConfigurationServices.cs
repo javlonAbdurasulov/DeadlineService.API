@@ -22,7 +22,7 @@ namespace DeadlineService.Infrastructure.AppConfiguration
     {
         public static void AddConfigurationServices(this IServiceCollection services,IConfiguration configuration)
         {
-            services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Shokir")));
+            services.AddDbContext<DSDbContext>(s => s.UseNpgsql(configuration.GetConnectionString("Javlon")));
             services.AddStackExchangeRedisCache(options =>
             {
                 options.Configuration = "localhost:6379";
