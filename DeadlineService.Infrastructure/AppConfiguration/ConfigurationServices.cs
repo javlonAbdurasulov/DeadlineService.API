@@ -34,6 +34,8 @@ namespace DeadlineService.Infrastructure.AppConfiguration
             services.AddScoped<ICommentRepository,CommentRepository>();
             services.AddScoped<IOrderRepository,OrderRepository>();
             services.AddScoped<IPersonalInfoRepository,PersonalInfoRepository>();
+            services.AddScoped<IPersonalInfoService, PersonalInfoService>();
+
 
             services.AddScoped<IRedisCacheService, RedisCacheService>();
 

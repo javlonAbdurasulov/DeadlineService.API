@@ -12,13 +12,16 @@ namespace DeadlineService.Application.Services.Model
         private readonly IUserRepository _userRepository;
     
         private readonly IRedisCacheService _cache;
+        private readonly IPersonalInfoService _personalInfoService;
       
 
         public UserService(
             IUserRepository userRepository,
-            IRedisCacheService appCache
+            IRedisCacheService appCache,
+            IPersonalInfoService personalInfoService
           )
         {
+            _personalInfoService= personalInfoService ?? throw new ArgumentNullException(nameof(personalInfoService));
             _userRepository = userRepository;
             _cache = appCache;
         }
@@ -36,6 +39,22 @@ namespace DeadlineService.Application.Services.Model
             {
                 Username = userWithEmail.Username,
                 Id = userWithEmail.Id
+            };
+            return new(userGetDTO);
+        }
+        public async Task<ResponseModel<UserGetDTO>> GetByUsernameAsync(string username)
+        {
+            if (string.IsNullOrEmpty(username)) return new("email is empty");
+
+            User userWithUsername = await _userRepository.GetByUsernameAsync(username);
+
+            if (userWithUsername == null)
+                return new("Пользователь с таким email не сушествует!");
+
+            UserGetDTO userGetDTO = new UserGetDTO()
+            {
+                Username = userWithUsername.Username,
+                Id = userWithUsername.Id
             };
             return new(userGetDTO);
         }
@@ -67,12 +86,29 @@ namespace DeadlineService.Application.Services.Model
             return new ResponseModel<IEnumerable<User>>(allUsers);
         }   
 
-        public async Task<ResponseModel<User>> UpdateUser(string username, string email)
+        public async Task<ResponseModel<bool>> UpdateUser(UserUpdateDTO user)
         {
-            var userNew = await _userRepository.GetByUsernameAsync(username);
-            if (username == null) return new ResponseModel<User>("Пользователь с таким аддресом электронной почты не нашлось.");
+            var userNew = await _userRepository.GetByIdAsync(user.UserId);
+
+            if (userNew == null) 
+                return new ResponseModel<bool>("Пользователь с таким идентификатором не нашлось");
+
+            var personalInfo =await  _personalInfoService.GetAllPersonalInfoAsync();
+            
+          var userForUpdate=  new PersonalInfoUpdateDTO()
+            {
+              Id= personalInfo.Result.FirstOrDefault(x => x.UserId == user.UserId).UserId,
+                Description = user.Description,
+                Email = user.Email,
+                PhoneNumber = user.PhoneNumber,
+                Photo = user.Photo,
+            };
+            
+            await _personalInfoService.UpdatePersonalInfoAsync(userForUpdate);
+
             await _userRepository.UpdateAsync(userNew);
-            return new ResponseModel<User>(userNew);
+
+            return new ResponseModel<bool>(true);
         }
     }
 }

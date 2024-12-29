@@ -8,6 +8,7 @@ namespace DeadlineService.Application.Interfaces.Services
         public Task<ResponseModel<UserGetDTO>> GetUserByIdAsync(int Id);
         public Task<ResponseModel<IEnumerable<User>>> GetAllUsers();
         public Task<ResponseModel<IEnumerable<User>>> GetAllWithAllInformationAsync();
-        public Task<ResponseModel<User>> UpdateUser(string username, string email);
+        public Task<ResponseModel<bool>> UpdateUser(UserUpdateDTO user);
+        public Task<ResponseModel<UserGetDTO>> GetByUsernameAsync(string username);
     }
 }

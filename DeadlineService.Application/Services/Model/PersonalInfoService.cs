@@ -7,22 +7,22 @@ namespace DeadlineService.Application.Services.Model
     public class PersonalInfoService : IPersonalInfoService
     {
         private readonly IPersonalInfoRepository _personalInfoRepository;
-        private readonly IUserService _userService;
         private readonly IRedisCacheService _cache;
-        public PersonalInfoService(IPersonalInfoRepository personalInfoRepository, IUserService userService, IRedisCacheService cache)
+        private readonly IUserRepository _userRepository;
+        public PersonalInfoService(IPersonalInfoRepository personalInfoRepository, IRedisCacheService cache, IUserRepository userRepository)
         {
+            _userRepository= userRepository;
             _personalInfoRepository = personalInfoRepository;
-            _userService = userService;
             _cache = cache;
         }
         public async Task<ResponseModel<PersonalInfoGetDTO>> CreatePersonalInfoAsync(PersonalInfoCreateDTO personalInfoDTO)
         {
-            var userGetById = await _userService.GetUserByIdAsync(personalInfoDTO.UserId);
-            if (userGetById.Result == null)
+            var userGetById = await _userRepository.GetByIdAsync(personalInfoDTO.UserId);
+            if (userGetById == null)
             {
-                return new(userGetById.Error);
+                return new ResponseModel<PersonalInfoGetDTO>("Такого пользователя нет");
             }
-            else if (userGetById.Result.PersonalInfoId != null)
+            else if (userGetById.PersonalInfo!= null)
             {
                 return new("User уже имеет PersonalInfo, невозможно создать!");
             }
@@ -42,6 +42,12 @@ namespace DeadlineService.Application.Services.Model
                 Id = personalInfo.Id
             };
             return new(personalInfoGetDTO);
+        }
+
+        public async Task<ResponseModel<IEnumerable<PersonalInfo>>> GetAllPersonalInfoAsync()
+        {
+            var userPersonalInfo = await _personalInfoRepository.GetAllAsync();
+            return new(userPersonalInfo);
         }
 
         public async Task<ResponseModel<PersonalInfoGetDTO>> GetPersonalInfoByIdAsync(int Id)
@@ -112,10 +118,10 @@ namespace DeadlineService.Application.Services.Model
 
         public async Task<ResponseModel<PersonalInfoGetDTO>> UpdatePersonalInfoAsync(PersonalInfoUpdateDTO personalInfoDTO)
         {
-            var personalInfoGetById = await GetPersonalInfoByIdAsync(personalInfoDTO.Id);
-            if (personalInfoGetById.Result == null)
+            var personalInfoGetById = await _personalInfoRepository.GetByIdAsync(personalInfoDTO.Id);
+            if (personalInfoGetById == null)
             {
-                return new ResponseModel<PersonalInfoGetDTO>(personalInfoGetById.Error);
+                return new ResponseModel<PersonalInfoGetDTO>("Таких данных нет");
             }
             PersonalInfo personalInfo = new()
             {
@@ -124,8 +130,8 @@ namespace DeadlineService.Application.Services.Model
                 PhoneNumber = personalInfoDTO.PhoneNumber,
                 Description = personalInfoDTO.Description,
                 Photo = personalInfoDTO.Photo,
-                CreateAt = personalInfoGetById.Result.CreateAt,
-                UserId = personalInfoGetById.Result.UserId
+                CreateAt = personalInfoGetById.CreateAt,
+                UserId = personalInfoGetById.UserId
             };
             personalInfo = await _personalInfoRepository.UpdateAsync(personalInfo);
             PersonalInfoGetDTO personalInfoGetDTO = new()

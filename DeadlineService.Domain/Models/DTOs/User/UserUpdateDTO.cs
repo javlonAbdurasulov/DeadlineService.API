@@ -1,16 +1,17 @@
-﻿using System;
+﻿using DeadlineService.Domain.Models.Entity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DeadlineService.Domain.Models.DTOs.PersonalInfo
+namespace DeadlineService.Domain.Models.DTOs.User
 {
-    public class PersonalInfoUpdateDTO
+    public class UserUpdateDTO
     {
-        public int Id { get; set; }
+        public int UserId { get; set; }
         public string? Description { get; set; }
-        public byte[]? Photo { get; set; }
+        public byte[]? Photo { get; } = null;
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
     }

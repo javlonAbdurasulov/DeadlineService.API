@@ -82,10 +82,10 @@ namespace DeadlineService.API.Controllers
             return allUsers;
         }
         [HttpPatch]
-        public async Task<ResponseModel<IEnumerable<UserGetDTO>>> UpdateUser(string username,string email)
+        public async Task<ResponseModel<bool>> UpdateUser(UserUpdateDTO dto)
         {
-            var allUsers = await _userService.GetAllUsers();
-            return new ResponseModel<IEnumerable<UserGetDTO>>();
+            var user= await _userService.UpdateUser(dto);
+            return user;
         }
         [HttpPost]
         public async Task<ResponseModel<User>> Registration(RegisterUser registerUser)
