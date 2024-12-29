@@ -54,7 +54,9 @@ namespace DeadlineService.Application.Services.Model
             UserGetDTO userGetDTO = new UserGetDTO()
             {
                 Username = userWithUsername.Username,
-                Id = userWithUsername.Id
+                Id = userWithUsername.Id,
+                RefreshToken = userWithUsername.RefreshToken,
+                RefreshTokenExpireTimeUtc = userWithUsername.RefreshTokenExpiryTimeUtc
             };
             return new(userGetDTO);
         }
