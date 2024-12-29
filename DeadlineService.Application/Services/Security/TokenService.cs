@@ -18,13 +18,18 @@ namespace DeadlineService.Application.Services.Security
     {
         private readonly IConfiguration _configuration;
         private readonly IUserService _userService;
-        public TokenService(IConfiguration configuration,IUserService userService)
+        private readonly IRoleRepository _roleRepository;
+        public TokenService(IConfiguration configuration, IUserService userService, IRoleRepository roleRepository)
         {
             _configuration = configuration;
             _userService = userService;
+            _roleRepository = roleRepository;
         }
         public async Task<ResponseModel<JwtToken>> CreateJwtToken(string UserName)
         {
+            var user = await _userService.GetByUsernameAsync(UserName);
+            var role = await _roleRepository.GetAllWithUserAsync();
+            var roleUser = role.FirstOrDefault(x => x.Users.FirstOrDefault(x => x.Username == UserName).Username == UserName);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var tokenKey = Encoding.UTF8.GetBytes(_configuration.GetSection("JWTSettings")["SecretKey"] ?? "Aa12@#aA");
@@ -32,22 +37,29 @@ namespace DeadlineService.Application.Services.Security
             var tokenAudience = _configuration.GetSection("JWTSettings")["Audience"];
             var tokenExpiretTime = Convert.ToInt32(_configuration.GetSection("JWTSettings")["ExpiretTime"]);
 
-            var claims = new List<Claim> { new Claim(ClaimTypes.Role, UserName), new Claim(ClaimTypes.Name, UserName) };
+            var claims = new List<Claim> { new Claim(ClaimTypes.Role, roleUser.Name), new Claim(ClaimTypes.Name, UserName) };
             var jwt = new JwtSecurityToken(
                     issuer: tokenIssuer,
                     audience: tokenAudience,
                     claims: claims,
                     expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(tokenExpiretTime)),
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256));
-            //await
-            var refreshToken = RefreshToken(UserName);
+            var refreshToken = GenerateRefreshToken();
+            //await и обновить пользователя в базе его refreshToken
+            user.Result.RefreshToken = refreshToken;
+            user.Result.RefreshTokenExpireTimeUtc = DateTime.UtcNow.AddMinutes(Convert.ToInt32(_configuration.GetSection("JWTSettings")["ExpiretTime"]));
+            user = await _userService.UpdateUser()
 
             return new(new JwtToken { AccessToken = tokenHandler.WriteToken(jwt), RefreshToken = refreshToken });
 
         }
-        public string RefreshToken(string UserName)
+        public Task<ResponseModel<JwtToken>> RefreshToken(JwtToken jwtToken)
         {
-            //использовать как-то username
+
+            throw new NotImplementedException();
+        }
+        private string GenerateRefreshToken()
+        {
             var randomNumber = new byte[32];
             using (var rng = RandomNumberGenerator.Create())
             {
