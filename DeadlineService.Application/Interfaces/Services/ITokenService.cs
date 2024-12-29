@@ -10,8 +10,8 @@ namespace DeadlineService.Application.Interfaces.Services
 {
     public interface ITokenService
     {
-        Task<ResponseModel<JwtToken>> CreateJwtToken(string UserName);
-        Task<ResponseModel<JwtToken>> RefreshToken(string UserName);
+        Task<ResponseModel<JwtToken>> CreateJwtToken(int UserId,string UserName);
+        Task<ResponseModel<JwtToken>> RefreshToken(JwtToken jwtToken);
         ClaimsPrincipal GetPrincipalFromExpiredToken(string token);
     }
 }
