@@ -11,7 +11,11 @@ namespace DeadlineService.Infrastructure.Data
         }
         public DSDbContext(DbContextOptions<DSDbContext> dbContextOptions) : base(dbContextOptions)
         {
-
+           
+        }
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            optionsBuilder.EnableSensitiveDataLogging();
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

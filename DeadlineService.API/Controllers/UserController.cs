@@ -4,7 +4,6 @@ using DeadlineService.Domain.Models;
 using DeadlineService.Domain.Models.DTOs.User;
 using DeadlineService.Domain.Models.Entity;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 using System.Text;
 using System.Text.Json;
 
@@ -15,13 +14,11 @@ namespace DeadlineService.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
-        private readonly IAuthorizationService _authorizationService;
         private readonly IRedisCacheService _redisCache;
         public UserController(IUserService userService,
-            IRedisCacheService redisCache,
-            IAuthorizationService authorizationService)
+            IRedisCacheService redisCache
+            )
         {
-            _authorizationService = authorizationService;
             _redisCache = redisCache;
             _userService = userService;
         }
@@ -84,28 +81,9 @@ namespace DeadlineService.API.Controllers
         [HttpPatch]
         public async Task<ResponseModel<bool>> UpdateUser(UserUpdateDTO dto)
         {
-            var user= await _userService.UpdateUser(dto);
+            var user = await _userService.UpdateUser(dto);
             return user;
         }
-        [HttpPost]
-        public async Task<ResponseModel<User>> Registration(RegisterUser registerUser)
-        {
-            if (registerUser.ConfirmPassword != registerUser.Password)
-            {
-                return new ResponseModel<User>()
-                {
-                    StatusCode = HttpStatusCode.BadRequest,
-                    Error = "Password and Confirm Password do not match.",
-                    Result = null
-                };
-            }
 
-            return await _authorizationService.RegistrationAsync(registerUser);
-        }
-        [HttpPost]
-        public async Task<ResponseModel<UserGetDTO>> Login(LoginUser loginUser)
-        {
-            return await _authorizationService.LoginAsync(loginUser);
-        }
     }
 }

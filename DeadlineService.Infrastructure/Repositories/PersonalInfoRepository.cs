@@ -43,7 +43,17 @@ namespace DeadlineService.Infrastructure.Services
 
         public async Task<PersonalInfo> UpdateAsync(PersonalInfo obj)
         {
-            _db.PersonalInfos.Update(obj);
+            var trackedEntity = _db.PersonalInfos.Local.FirstOrDefault(e => e.Id == obj.Id);
+            if (trackedEntity != null)
+            {
+                // Объект уже отслеживается, обновляем его напрямую
+                _db.Entry(trackedEntity).CurrentValues.SetValues(obj);
+            }
+            else
+            {
+                // Объект не отслеживается, добавляем его
+                _db.PersonalInfos.Update(obj);
+            }
             await _db.SaveChangesAsync();
             return obj;
         }
