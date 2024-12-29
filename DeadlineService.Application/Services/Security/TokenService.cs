@@ -1,4 +1,5 @@
-﻿using DeadlineService.Application.Interfaces.Services;
+﻿using DeadlineService.Application.Interfaces.Repostitories;
+using DeadlineService.Application.Interfaces.Services;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
@@ -16,19 +17,20 @@ namespace DeadlineService.Application.Services.Security
     public class TokenService : ITokenService
     {
         private readonly IConfiguration _configuration;
-        public TokenService(IConfiguration configuration)
+        private readonly IUserService _userService;
+        public TokenService(IConfiguration configuration,IUserService userService)
         {
             _configuration = configuration;
+            _userService = userService;
         }
-        public JwtToken GenerateJwtToken(string UserName)
+        public async Task<ResponseModel<JwtToken>> CreateJwtToken(string UserName)
         {
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            //var tokenKey = "Aa12@#aA";
-            var tokenKey = Encoding.UTF8.GetBytes(_configuration.GetSection("Authorization")["SecretKey"] ?? "Aa12@#aA");
-            var tokenIssuer = _configuration.GetSection("Authorization")["Issuer"];
-            var tokenAudience = _configuration.GetSection("Authorization")["Audience"];
-            var tokenExpiretTime = Convert.ToInt32(_configuration.GetSection("Authorization")["ExpiretTime"]);
+            var tokenKey = Encoding.UTF8.GetBytes(_configuration.GetSection("JWTSettings")["SecretKey"] ?? "Aa12@#aA");
+            var tokenIssuer = _configuration.GetSection("JWTSettings")["Issuer"];
+            var tokenAudience = _configuration.GetSection("JWTSettings")["Audience"];
+            var tokenExpiretTime = Convert.ToInt32(_configuration.GetSection("JWTSettings")["ExpiretTime"]);
 
             var claims = new List<Claim> { new Claim(ClaimTypes.Role, UserName), new Claim(ClaimTypes.Name, UserName) };
             var jwt = new JwtSecurityToken(
@@ -37,10 +39,10 @@ namespace DeadlineService.Application.Services.Security
                     claims: claims,
                     expires: DateTime.UtcNow.Add(TimeSpan.FromMinutes(tokenExpiretTime)),
                     signingCredentials: new SigningCredentials(new SymmetricSecurityKey(tokenKey), SecurityAlgorithms.HmacSha256));
-
+            //await
             var refreshToken = RefreshToken(UserName);
 
-            return new JwtToken { AccessToken = tokenHandler.WriteToken(jwt), RefreshToken = refreshToken };
+            return new(new JwtToken { AccessToken = tokenHandler.WriteToken(jwt), RefreshToken = refreshToken });
 
         }
         public string RefreshToken(string UserName)
@@ -55,7 +57,30 @@ namespace DeadlineService.Application.Services.Security
         }
         public ClaimsPrincipal GetPrincipalFromExpiredToken(string token)
         {
-            throw new NotImplementedException();
+            var jwtSettings = _configuration.GetSection("JWTSettings");
+            var tokenValidateParametrs = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidateLifetime = true,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes
+                    (_configuration.GetSection("JWTSettings")["SecretKey"] ?? "Aa12@#aA")),
+                ValidIssuer = jwtSettings["Issuer"],
+                ValidAudience = jwtSettings["Audience"]
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken securityToken;
+            var principal = tokenHandler.ValidateToken(token,tokenValidateParametrs, out securityToken);
+            var jwtTokenSecurity = securityToken as JwtSecurityToken;
+
+            if (jwtTokenSecurity is null 
+                || !jwtTokenSecurity.Header.Alg.Equals(SecurityAlgorithms.HmacSha256,StringComparison.InvariantCultureIgnoreCase))
+            {
+
+            }
+            return principal;
         }
     }
 }

@@ -38,20 +38,20 @@ namespace DeadlineService.Application.ApplicationService
                     ValidateIssuer = true,
                     
                     // строка, представляющая издателя
-                    ValidIssuer = configuration.GetSection("Authorization")["Issuer"],
+                    ValidIssuer = configuration.GetSection("JWTSettings")["Issuer"],
                     
                     // будет ли валидироваться потребитель токена
                     ValidateAudience = true,
                     
                     // установка потребителя токена
-                    ValidAudience = configuration.GetSection("Authorization")["Audience"],
+                    ValidAudience = configuration.GetSection("JWTSettings")["Audience"],
                     
                     // будет ли валидироваться время существования
                     ValidateLifetime = true,
                     
                     // установка ключа безопасности
                     IssuerSigningKey = 
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Authorization")["SecretKey"]??"Aa12@#aA")),
+                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWTSettings")["SecretKey"]??"Aa12@#aA")),
                     
                     // валидация ключа безопасности
                     ValidateIssuerSigningKey = true,
