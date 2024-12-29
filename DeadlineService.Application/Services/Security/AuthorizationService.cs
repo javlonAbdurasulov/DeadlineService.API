@@ -18,6 +18,8 @@ namespace DeadlineService.Application.Services.Security
         public AuthorizationService(IUserRepository userRepository, IPasswordHasher passwordHasher, MailgunService mailgunService)
         {
             _userRepository = userRepository;
+            _passwordHasher= passwordHasher;
+            _mailGunService= mailgunService;
         }
         public async Task<ResponseModel<User>> RegistrationAsync(RegisterUser registerUser)
         {

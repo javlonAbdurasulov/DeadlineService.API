@@ -12,10 +12,10 @@ namespace DeadlineService.API.Controllers
     public class EmailController
     {
         private readonly MailgunService _emailSender;
-        private readonly IUserService _userService;
-        public EmailController(MailgunService mailgun,IUserService userService)
+        private readonly IAuthorizationService _authorizationService;
+        public EmailController(MailgunService mailgun, IAuthorizationService authorizationService)
         {
-            _userService=userService;   
+            _authorizationService = authorizationService;   
             _emailSender = mailgun;
         }
         [HttpPost]
@@ -23,7 +23,7 @@ namespace DeadlineService.API.Controllers
         {
             var token = Guid.NewGuid().ToString();
             var confirmationLink = $"http://localhost/confirm?email={userEmail}&token={token}";
-            await _userService.SendConfirmationEmail(userEmail, confirmationLink);
+            await _authorizationService.SendConfirmationEmail(userEmail, confirmationLink);
             return new ResponseModel<string>("Operation is successfuly finally");
         }
     }

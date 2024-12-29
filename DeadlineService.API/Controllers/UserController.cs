@@ -15,10 +15,13 @@ namespace DeadlineService.API.Controllers
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IRedisCacheService _redisCache;
         public UserController(IUserService userService,
-            IRedisCacheService redisCache)
+            IRedisCacheService redisCache,
+            IAuthorizationService authorizationService)
         {
+            _authorizationService = authorizationService;
             _redisCache = redisCache;
             _userService = userService;
         }
@@ -97,12 +100,12 @@ namespace DeadlineService.API.Controllers
                 };
             }
 
-            return await _userService.RegistrationAsync(registerUser);
+            return await _authorizationService.RegistrationAsync(registerUser);
         }
         [HttpPost]
         public async Task<ResponseModel<UserGetDTO>> Login(LoginUser loginUser)
         {
-            return await _userService.LoginAsync(loginUser);
+            return await _authorizationService.LoginAsync(loginUser);
         }
     }
 }

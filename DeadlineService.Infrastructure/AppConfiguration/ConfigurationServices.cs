@@ -29,10 +29,12 @@ namespace DeadlineService.Infrastructure.AppConfiguration
                 options.InstanceName = "SampleInstance"; 
             });
             services.AddScoped<IUserRepository,UserRepository>();
+            services.AddScoped<IUserService, UserService>();
+
             services.AddScoped<ICommentRepository,CommentRepository>();
             services.AddScoped<IOrderRepository,OrderRepository>();
             services.AddScoped<IPersonalInfoRepository,PersonalInfoRepository>();
-            services.AddScoped<IUserService, UserService>();
+
             services.AddScoped<IRedisCacheService, RedisCacheService>();
 
             services.AddTransient<IPasswordHasher, PasswordHasher>();

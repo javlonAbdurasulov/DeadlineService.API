@@ -13,15 +13,14 @@ namespace DeadlineService.Application.Services.Model
     
         private readonly IRedisCacheService _cache;
       
-        private readonly IPersonalInfoService _personalInfoService;
+
         public UserService(
             IUserRepository userRepository,
-            IRedisCacheService appCache,
-            IPersonalInfoService personalInfoService)
+            IRedisCacheService appCache
+          )
         {
             _userRepository = userRepository;
             _cache = appCache;
-            _personalInfoService=personalInfoService;
         }
 
         public async Task<ResponseModel<UserGetDTO>> GetByEmailAsync(string email)
