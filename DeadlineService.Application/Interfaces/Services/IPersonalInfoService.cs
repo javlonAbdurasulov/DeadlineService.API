@@ -13,5 +13,6 @@ namespace DeadlineService.Application.Interfaces.Services
         public Task<ResponseModel<PersonalInfoGetDTO>> UpdatePersonalInfoAsync(PersonalInfoUpdateDTO personalInfoDTO);
         public Task<ResponseModel<PersonalInfoGetDTO>> SetOrUpdatePhotoAsync(int personalInfoId, byte[] photo);
         public Task<ResponseModel<PersonalInfoGetDTO>> SetOrUpdateDescriptionAsync(int personalInfoId, string description);
+        public Task<ResponseModel<IEnumerable<PersonalInfo>>> GetAllPersonalInfoAsync();
     }
 }

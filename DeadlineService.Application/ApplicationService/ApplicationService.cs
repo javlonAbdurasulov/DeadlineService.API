@@ -1,4 +1,7 @@
 ﻿using DeadlineService.Application.Interfaces.Repostitories;
+using DeadlineService.Application.Interfaces.Services;
+using DeadlineService.Application.Services.Model;
+using DeadlineService.Application.Services.Security;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +20,7 @@ namespace DeadlineService.Application.ApplicationService
     {
         public static void AddApplicationServices(this IServiceCollection services, IConfiguration configuration)
         {
+            #region EmailService
             services.AddHttpClient("MailGunClient", client =>
             {
                 client.BaseAddress = new Uri("https://api.mailgun.net/v3");
@@ -24,39 +28,46 @@ namespace DeadlineService.Application.ApplicationService
             });
 
             services.AddSingleton<MailgunService>();
-
+            #endregion
+            #region Авторизация
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    // указывает, будет ли валидироваться издатель при валидации токена
-                    ValidateIssuer = true,
-                    
-                    // строка, представляющая издателя
-                    ValidIssuer = configuration.GetSection("JWTSettings")["Issuer"],
-                    
-                    // будет ли валидироваться потребитель токена
-                    ValidateAudience = true,
-                    
-                    // установка потребителя токена
-                    ValidAudience = configuration.GetSection("JWTSettings")["Audience"],
-                    
-                    // будет ли валидироваться время существования
-                    ValidateLifetime = true,
-                    
-                    // установка ключа безопасности
-                    IssuerSigningKey = 
-                    new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("JWTSettings")["SecretKey"]??"Aa12@#aA")),
-                    
-                    // валидация ключа безопасности
-                    ValidateIssuerSigningKey = true,
-                };
-            });
+           .AddJwtBearer(options =>
+           {
+               options.TokenValidationParameters = new TokenValidationParameters
+               {
+                   // указывает, будет ли валидироваться издатель при валидации токена
+                   ValidateIssuer = true,
+
+                   // строка, представляющая издателя
+                   ValidIssuer = configuration.GetSection("Authorization")["Issuer"],
+
+                   // будет ли валидироваться потребитель токена
+                   ValidateAudience = true,
+
+                   // установка потребителя токена
+                   ValidAudience = configuration.GetSection("Authorization")["Audience"],
+
+                   // будет ли валидироваться время существования
+                   ValidateLifetime = true,
+
+                   // установка ключа безопасности
+                   IssuerSigningKey =
+                   new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration.GetSection("Authorization")["SecretKey"] ?? "Aa12@#aA")),
+
+                   // валидация ключа безопасности
+                   ValidateIssuerSigningKey = true,
+               };
+           });
+            #endregion
+            #region Connection
+            services.AddScoped<IAuthorizationService,AuthorizationService>();
+
+            #endregion
+
         }
     }
 }
