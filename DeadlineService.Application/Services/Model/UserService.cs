@@ -91,13 +91,13 @@ namespace DeadlineService.Application.Services.Model
             var userNew = await _userRepository.GetByIdAsync(user.UserId);
 
             if (userNew == null) 
-                return new ResponseModel<bool>("Пользователь с таким идентификатором не нашлось");
+                return new ResponseModel<bool>("Пользователя с таким идентификатором не нашлось");
 
             var personalInfo =await  _personalInfoService.GetAllPersonalInfoAsync();
             
-          var userForUpdate=  new PersonalInfoUpdateDTO()
+          var userForUpdate =  new PersonalInfoUpdateDTO()
             {
-              Id= personalInfo.Result.FirstOrDefault(x => x.UserId == user.UserId).UserId,
+                Id= personalInfo.Result.FirstOrDefault(x => x.UserId == user.UserId).Id,
                 Description = user.Description,
                 Email = user.Email,
                 PhoneNumber = user.PhoneNumber,
@@ -105,8 +105,6 @@ namespace DeadlineService.Application.Services.Model
             };
             
             await _personalInfoService.UpdatePersonalInfoAsync(userForUpdate);
-
-            await _userRepository.UpdateAsync(userNew);
 
             return new ResponseModel<bool>(true);
         }
