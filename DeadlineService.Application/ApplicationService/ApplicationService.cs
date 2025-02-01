@@ -23,7 +23,7 @@ namespace DeadlineService.Application.ApplicationService
             #region EmailService
             services.AddHttpClient("MailGunClient", client =>
             {
-                client.BaseAddress = new Uri("https://api.mailgun.net/v3");
+                client.BaseAddress = new Uri("https://api.mailgun.net/v3/");
                 client.DefaultRequestHeaders.Add("Accept", "application/json");
             });
 

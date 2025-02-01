@@ -18,24 +18,26 @@ namespace MyApp.Services
 
         public async Task SendEmailAsync(string to, string subject, string body)
         {
-            var client = _httpClientFactory.CreateClient("MailGunClient");
-            var authToken = Convert.ToBase64String(Encoding.UTF8.GetBytes($"api:{_apiKey}"));
+            using var client = new HttpClient();
+            client.BaseAddress = new Uri(@$"{_baseUrl}/{_domain}");
 
-            client.DefaultRequestHeaders.Authorization =
-                new System.Net.Http.Headers.AuthenticationHeaderValue("Basic", authToken);
+            var authToken = Convert.ToBase64String(Encoding.ASCII.GetBytes($"api:{_apiKey}"));
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
 
             var content = new FormUrlEncodedContent(new[]
             {
-            new KeyValuePair<string, string>("from", $"Your App <mailgun@{_domain}>"),
-            new KeyValuePair<string, string>("to", to),
-            new KeyValuePair<string, string>("subject", subject),
-            new KeyValuePair<string, string>("html", body)
-        });
+        new KeyValuePair<string, string>("from", "Your Name <your-email@your-domain.com>"),
+        new KeyValuePair<string, string>("to", to),
+        new KeyValuePair<string, string>("subject", subject),
+        new KeyValuePair<string, string>("text", body)
+    });
 
-            var response = await client.PostAsync($"{_baseUrl}/{_domain}/messages", content);
+            var response = await client.PostAsync("/messages", content);
+
+            // Проверка успешного выполнения запроса
             response.EnsureSuccessStatusCode();
         }
 
-        
+
     }
 }
