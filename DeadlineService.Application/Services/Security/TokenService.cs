@@ -30,7 +30,7 @@ namespace DeadlineService.Application.Services.Security
             var tokenAudience = _configuration.GetSection("Authorization")["Audience"];
             var tokenExpiretTime = Convert.ToInt32(_configuration.GetSection("Authorization")["ExpiretTime"]);
 
-            var claims = new List<Claim> { new Claim(ClaimTypes.Role, UserName), new Claim(ClaimTypes.Name, UserName) };
+            var claims = new List<Claim> {new Claim(ClaimTypes.Role, UserName), new Claim(ClaimTypes.Name, UserName) };
             var jwt = new JwtSecurityToken(
                     issuer: tokenIssuer,
                     audience: tokenAudience,
